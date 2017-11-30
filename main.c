@@ -14,24 +14,21 @@
 
 void init();
 
-int main(void)
-{
-	//Initialisierung ausfuehren
-	
+int main(void) {
+	// Initialisierung ausfuehren
+
 	init();
 
-	while (1)
-	{
-	}	
+	while (1) {
+	}
 }
 
 
 //INIT
-void init()
-{
-	uartInit();   // serielle Ausgabe an PC
-	ADCInit(0);   // Analoge Werte einlesen
-	PWMInit();    // Pulsweite auf D6 ausgeben 
-	timerInit();  // "Systemzeit" initialisieren
-	//servoInit();  // Servoansteuerung initialisieren
+void init() {
+	uartInit();		// serielle Ausgabe an PC
+	ADCInit(0);		// Analoge Werte einlesen
+	PWMInit();		// Pulsweite auf D6 ausgeben 
+	timerInit();		// "Systemzeit" initialisieren
+	// servoInit(); // Servoansteuerung initialisieren
 }
