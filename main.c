@@ -19,9 +19,12 @@ int main(void) {
 
 	init();
     DDRC |= (1<<5);
-    PORTC |= (1<<5);
 
 	while (1) {
+    PORTC |= (1<<5);
+    _delay_ms(500);
+    PORTC &= ~(1<<5);
+    _delay_ms(500);
 	}
 }
 
