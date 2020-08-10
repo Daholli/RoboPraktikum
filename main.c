@@ -18,6 +18,8 @@ int main(void) {
 	// Initialisierung ausfuehren
 
 	init();
+    DDRC |= (1<<5);
+    PORTC |= (1<<5);
 
 	while (1) {
 	}
