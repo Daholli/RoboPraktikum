@@ -3,7 +3,7 @@
 ###############################################################################
 # Source
 # Name your Project
-PROJECT = LED-ansteuern
+PROJECT = basis 
 
 # Sourcefiles
 SOURCE =main.c
