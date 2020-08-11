@@ -28,16 +28,16 @@ int main(void) {
 
     uint32_t start;
 
-    enum enumbig {ROT, ROTGElB, GELB, GRUEN} autos;
-    enum enumsmall {ROTf, GRUENf} fuss;
+    typedef enum {ROT, ROTGElB, GELB, GRUEN} Autos;
+    typedef enum {ROTf, GRUENf} Fuss;
+    typedef enum {0, 1, 2, 3} phases;
 
-    void auto_ampel(enumbig zustand) {
+    void auto_ampel(Autos zustand) {
         switch(zustand) {
             case ROT:
                 PORTC |=  (1<<5)
                 PORTC &= ~(1<<4)
-                PORTC &= ~(1<<3)
-                
+                PORTC &= ~(1<<3) 
                 break;
             case ROTGELB:
                 PORTC |=  (1<<5)
@@ -57,7 +57,7 @@ int main(void) {
         }
     }
 
-    void fuss_ampel(enumsmall zustand) {
+    void fuss_ampel(Fuss zustand) {
         switch(zustand) {
             case ROTf:
                 PORTC |=  (1<<1)
@@ -70,9 +70,8 @@ int main(void) {
         }
     }
 
-    enum phases {0, 1, 2, 3} Phasen;
 
-    bool lock;
+    int lock;
 
     void changePhases(phases Phasen) {
         while(getMsTimer() > start+10000) {
@@ -110,7 +109,7 @@ int main(void) {
                         auto_ampel(GRUEN);
                         fuss_ampel(ROT);
 
-                        lock=false;
+                        lock=0;
                         return;
                     }
             }
@@ -122,7 +121,7 @@ int main(void) {
         start = getMsTimer();
         if(!lock) {
             changePhases(0);
-            lock = true;
+            lock = 1;
         }
         
     }
