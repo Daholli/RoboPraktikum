@@ -28,8 +28,7 @@ int main(void) {
         uint8_t sw= !( PINC & ( 1 << 3 ) );
         if(nextEvent < getMsTimer()) {
             nextEvent = getMsTimer()+delay;
-            if (sw_alt < sw) {
-                
+            if (sw_alt < sw) {                
                 PORTC ^= (1<<5);
             }
             sw_alt=sw;
