@@ -31,9 +31,9 @@ int main(void) {
                 PORTC ^= (1<<5);
             }
         } else if (sw_alt > sw) {
-
+            PORTC = PORTC;
         } else {
-
+            PORTC = PORTC;
         }
         sw_alt=sw;
          
