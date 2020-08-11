@@ -28,31 +28,31 @@ int main(void) {
 
     uint32_t start;
 
-    typedef enum {ROT, ROTGElB, GELB, GRUEN} Autos;
-    typedef enum {ROTf, GRUENf} Fuss;
-    typedef enum {0, 1, 2, 3} phases;
+    enum Autos {ROT, ROTGELB, GELB, GRUEN};
+    enum Fuss {ROTf, GRUENf};
+    enum Phasen {0, 1, 2, 3};
 
     void auto_ampel(Autos zustand) {
         switch(zustand) {
             case ROT:
-                PORTC |=  (1<<5)
-                PORTC &= ~(1<<4)
-                PORTC &= ~(1<<3) 
+                PORTC |=  (1<<5);
+                PORTC &= ~(1<<4);
+                PORTC &= ~(1<<3);
                 break;
             case ROTGELB:
-                PORTC |=  (1<<5)
-                PORTC |=  (1<<4)
-                PORTC &= ~(1<<3)
+                PORTC |=  (1<<5);
+                PORTC |=  (1<<4);
+                PORTC &= ~(1<<3);
                 break;
             case GELB:
-                PORTC &= ~(1<<5)
-                PORTC |=  (1<<4)
-                PORTC &= ~(1<<3)
+                PORTC &= ~(1<<5);
+                PORTC |=  (1<<4);
+                PORTC &= ~(1<<3);
                 break;
             case GRUEN:
-                PORTC &= ~(1<<5)
-                PORTC &= ~(1<<4)
-                PORTC |=  (1<<3)
+                PORTC &= ~(1<<5);
+                PORTC &= ~(1<<4);
+                PORTC |=  (1<<3);
                 break;
         }
     }
@@ -60,12 +60,12 @@ int main(void) {
     void fuss_ampel(Fuss zustand) {
         switch(zustand) {
             case ROTf:
-                PORTC |=  (1<<1)
-                PORTC &= ~(1<<0)
+                PORTC |=  (1<<1);
+                PORTC &= ~(1<<0);
                 break;
             case GRUENf:
-                PORTC &= ~(1<<1)
-                PORTC |=  (1<<0)
+                PORTC &= ~(1<<1);
+                PORTC |=  (1<<0);
                 break;
         }
     }
@@ -73,9 +73,9 @@ int main(void) {
 
     int lock;
 
-    void changePhases(phases Phasen) {
+    void changePhases(Phasen phases) {
         while(getMsTimer() > start+10000) {
-            switch(Phasen) {
+            switch(phases) {
                 case 0: 
                     // Autos werden Gelb Fußgänger bleiben Rot
                     if (getMsTimer() > start+ 1000) {
