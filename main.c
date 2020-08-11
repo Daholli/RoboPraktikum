@@ -25,7 +25,7 @@ int main(void) {
     DDRC |= (1<<5);
        
     while (1) {
-        uint8_t sw= !( PINC & ( 1 << 3 ) );
+        uint8_t sw= ( PINC & ( 1 << 3 ) );
         if(nextEvent < getMsTimer()) {
             nextEvent += delay;
             if (sw_alt < sw) {
