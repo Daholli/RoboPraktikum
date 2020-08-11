@@ -18,7 +18,7 @@ int main(void) {
 	// Initialisierung ausfuehren
 
 	init();
-    const uint16_t delay = 50ms;
+    const uint16_t delay = 50;
     uint32_t nextEvent=getMsTimer()+delay
 
     uint8_t sw_alt = 0;
