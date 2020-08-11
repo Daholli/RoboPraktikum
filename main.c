@@ -25,7 +25,6 @@ int main(void) {
     DDRC |= (1<<5);
        
     while (1) {
-        PORTC &= ~(1<<5);
         uint8_t sw= !( PINC & ( 1 << 3 ) );
         if (sw_alt < sw) {
             PORTC |= (1<<5);
