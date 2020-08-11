@@ -28,8 +28,7 @@ int main(void) {
 	while (1) {
         if(nextEvent<getMsTimer()) {
             nextEvent += delay;
-            PORTC ^= (1<<5);
-            }
+            PORTC ^= (1<<5); 
         }
 	}
 }
