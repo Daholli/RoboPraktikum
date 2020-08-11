@@ -28,9 +28,9 @@ int main(void) {
 
     uint32_t start;
 
-    enum Autos {ROT, ROTGELB, GELB, GRUEN};
-    enum Fuss {ROTf, GRUENf};
-    enum Phasen {0, 1, 2, 3};
+    typedef enum {ROT, ROTGELB, GELB, GRUEN} Autos;
+    typedef enum {ROTf, GRUENf} Fuss;
+    typedef enum {0, 1, 2, 3} Phasen;
 
     void auto_ampel(Autos zustand) {
         switch(zustand) {
