@@ -4,3 +4,4 @@ dep/*
 *.eep
 *.elf
 *.hex
+pictures/
