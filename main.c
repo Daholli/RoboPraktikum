@@ -26,7 +26,7 @@ int main(void) {
     DDRC |= (1 << 1); // FußRot
     DDRC |= (1 << 0); // FußGrün
 
-    uint32_t start;
+    uint32_t start = getMsTimer();
     int lock = 0;
 
     typedef enum {ROT, ROTGELB, GELB, GRUEN} Autos;
