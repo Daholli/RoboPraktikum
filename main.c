@@ -29,7 +29,7 @@ int main(void) {
     uint32_t start;
 
     enum enumbig {ROT, ROTGElB, GELB, GRUEN} autos;
-    enum enumsmall {ROT, GRUEN} fuss;
+    enum enumsmall {ROTf, GRUENf} fuss;
 
     void auto_ampel(enumbig zustand) {
         switch(zustand) {
@@ -59,11 +59,11 @@ int main(void) {
 
     void fuss_ampel(enumsmall zustand) {
         switch(zustand) {
-            case ROT:
+            case ROTf:
                 PORTC |=  (1<<1)
                 PORTC &= ~(1<<0)
                 break;
-            case GRUEN:
+            case GRUENf:
                 PORTC &= ~(1<<1)
                 PORTC |=  (1<<0)
                 break;
