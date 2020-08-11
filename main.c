@@ -108,7 +108,8 @@ int main(void) {
 
                         lock=0;
                         return;
-                default:
+                case 4:
+                        // Default 
                         auto_ampel(GRUEN);
                         fuss_ampel(ROT);
                         return;
