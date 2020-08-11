@@ -30,10 +30,6 @@ int main(void) {
             if(nextEvent < getMsTimer()) {
                 PORTC ^= (1<<5);
             }
-        } else if (sw_alt > sw) {
-            PORTC = PORTC;
-        } else {
-            PORTC = PORTC;
         }
         sw_alt=sw;
          
