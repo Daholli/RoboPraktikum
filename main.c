@@ -18,11 +18,34 @@ int main(void) {
 	// Initialisierung ausfuehren
 
 	init();
-    const uint16_t delay = 50;
-    uint32_t nextEvent = getMsTimer()+delay;
+    
+    
 
-    uint8_t sw_alt = 0;
-    DDRC |= (1<<5);
+
+    enum enumbig {ROT, GELB, GRUEN} autos;
+    enum enumsmall {ROT, GRUEN} fuss;
+
+    enumbig auto_ampel(enumbig zustand) {
+        switch(zustand) {
+            case ROT:
+                break;
+            case GELB:
+                break;
+            case GRUEN:
+                break;
+        }
+    }
+
+    void changePhases() {
+
+    }
+
+    void keyPress() {
+        const uint32_t start = getMsTimer();
+        if (getMstTimer() > start + 1000) {
+            changePhases();
+        }
+    }
        
     while (1) {
         uint8_t sw= !( PINC & ( 1 << 3 ) );
