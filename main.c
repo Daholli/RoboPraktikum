@@ -108,6 +108,10 @@ int main(void) {
 
                         lock=0;
                         return;
+                default:
+                        auto_ampel(GRUEN);
+                        fuss_ampel(ROT);
+                        return;
                     }
             }
         }
@@ -123,7 +127,7 @@ int main(void) {
         
     }
 
-    changePhases(3);
+    changePhases(4);
        
     uint8_t sw_alt= 0;
     while (1) {
