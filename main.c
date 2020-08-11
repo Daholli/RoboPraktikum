@@ -26,18 +26,13 @@ int main(void) {
        
     while (1) {
         uint8_t sw= !( PINC & ( 1 << 3 ) );
-        if(sw_alt < sw ) {
-            
-        } else if ( sw_alt > sw) {
-            if(nextEvent<getMsTimer()) {
+        if (sw_alt < sw) {
+            if(nextEvent < getMsTimer()) {
                 nextEvent += delay;
                 PORTC ^= (1<<5);
-            }
-        } else {
-            
-        }
+            }  
+        } 
     }
-
 }
 
 
