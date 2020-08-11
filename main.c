@@ -30,7 +30,6 @@ int main(void) {
 
     typedef enum {ROT, ROTGELB, GELB, GRUEN} Autos;
     typedef enum {ROTf, GRUENf} Fuss;
-    typedef enum {0, 1, 2, 3} Phasen;
 
     void auto_ampel(Autos zustand) {
         switch(zustand) {
@@ -73,7 +72,7 @@ int main(void) {
 
     int lock;
 
-    void changePhases(Phasen phases) {
+    void changePhases(int phases) {
         while(getMsTimer() > start+10000) {
             switch(phases) {
                 case 0: 
