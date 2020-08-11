@@ -26,7 +26,17 @@ int main(void) {
     DDRC |= (1 << 1); // FußRot
     DDRC |= (1 << 0); // FußGrün
 
+
+    PORTC |=  (1<<5);
+    PORTC |=  (1<<4);
+    PORTC |=  (1<<3);
+    PORTC |=  (1<<1);
+    PORTC |=  (1<<0);
+
+
+
     uint32_t start;
+    int lock = 0;
 
     typedef enum {ROT, ROTGELB, GELB, GRUEN} Autos;
     typedef enum {ROTf, GRUENf} Fuss;
@@ -68,9 +78,6 @@ int main(void) {
                 break;
         }
     }
-
-
-    int lock;
 
     void changePhases(int phases) {
         while(getMsTimer() > start+10000) {
@@ -125,11 +132,9 @@ int main(void) {
         
     }
 
-    uint8_t sw_alt= 0;
-
-
     changePhases(3);
        
+    uint8_t sw_alt= 0;
     while (1) {
         uint8_t sw= !( PINB & ( 1 << 1 ) );
         if (sw_alt < sw) {
