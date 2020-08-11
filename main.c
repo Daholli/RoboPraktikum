@@ -18,9 +18,8 @@ int main(void) {
 	// Initialisierung ausfuehren
 
 	init();
-    
-    
 
+    uint32_t start;
 
     enum enumbig {ROT, GELB, GRUEN} autos;
     enum enumsmall {ROT, GRUEN} fuss;
@@ -36,15 +35,66 @@ int main(void) {
         }
     }
 
-    void changePhases() {
-
+    enumsmall fuss_ampel(enumsmall zustand) {
+        switch(zustand) {
+            case ROT:
+                break;
+            case GRUEN:
+                break;
+        }
     }
 
-    void keyPress() {
-        const uint32_t start = getMsTimer();
-        if (getMstTimer() > start + 1000) {
-            changePhases();
+    enum phases {0, 1, 2, 3} Phasen;
+
+    bool lock;
+
+    void changePhases(phases Phasen) {
+        while(getMsTimer() > start+10000) {
+            switch(Phasen) {
+                case 0: 
+                    // Autos werden Gelb Fußgänger bleiben Rot
+                    if (getMsTimer() > start+ 1000) {
+
+
+                        changePhases(1);
+                        return;
+                    }
+                case 1: 
+                    // Autos werden Rot Fußgänger werden Grün
+                    if (getMsTimer() > start+ 2000) {
+    
+    
+                        changePhases(2);
+                        return;
+                    }
+                case 2:
+                    // Autos werden Rot-Gelb Fußgänger werden Rot
+                    if (getMsTimer() > start+ 7000) {
+
+
+                        changePhases(3);
+                        return;
+                    }
+                case 3:
+                    // Autos werden Grün Fußgänger bleiben Rot
+                    if (getMsTimer() > start+ 8000) {
+
+
+                        lock=false;
+                        return;
+                    }
+            }
         }
+    }
+
+
+    void keyPress() {
+        start = getMsTimer();
+        if(!lock) {
+            changePhases(0);
+            lock = true;
+        }
+        
     }
        
     while (1) {
