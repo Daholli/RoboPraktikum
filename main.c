@@ -19,27 +19,53 @@ int main(void) {
 
 	init();
 
+    DDRC |= (1 << 5); // AutoRot
+    DDRC |= (1 << 4); // AutoGelb
+    DDRC |= (1 << 3); // AutoGrün
+
+    DDRC |= (1 << 1); // FußRot
+    DDRC |= (1 << 0); // FußGrün
+
     uint32_t start;
 
-    enum enumbig {ROT, GELB, GRUEN} autos;
+    enum enumbig {ROT, ROTGElB, GELB, GRUEN} autos;
     enum enumsmall {ROT, GRUEN} fuss;
 
-    enumbig auto_ampel(enumbig zustand) {
+    void auto_ampel(enumbig zustand) {
         switch(zustand) {
             case ROT:
+                PORTC |=  (1<<5)
+                PORTC &= ~(1<<4)
+                PORTC &= ~(1<<3)
+                
+                break;
+            case ROTGELB:
+                PORTC |=  (1<<5)
+                PORTC |=  (1<<4)
+                PORTC &= ~(1<<3)
                 break;
             case GELB:
+                PORTC &= ~(1<<5)
+                PORTC |=  (1<<4)
+                PORTC &= ~(1<<3)
                 break;
             case GRUEN:
+                PORTC &= ~(1<<5)
+                PORTC &= ~(1<<4)
+                PORTC |=  (1<<3)
                 break;
         }
     }
 
-    enumsmall fuss_ampel(enumsmall zustand) {
+    void fuss_ampel(enumsmall zustand) {
         switch(zustand) {
             case ROT:
+                PORTC |=  (1<<1)
+                PORTC &= ~(1<<0)
                 break;
             case GRUEN:
+                PORTC &= ~(1<<1)
+                PORTC |=  (1<<0)
                 break;
         }
     }
@@ -54,7 +80,8 @@ int main(void) {
                 case 0: 
                     // Autos werden Gelb Fußgänger bleiben Rot
                     if (getMsTimer() > start+ 1000) {
-
+                        auto_ampel(GELB);
+                        fuss_ampel(ROT);
 
                         changePhases(1);
                         return;
@@ -62,7 +89,8 @@ int main(void) {
                 case 1: 
                     // Autos werden Rot Fußgänger werden Grün
                     if (getMsTimer() > start+ 2000) {
-    
+                        auto_ampel(ROT);
+                        fuss_ampel(GRUEN);
     
                         changePhases(2);
                         return;
@@ -70,7 +98,8 @@ int main(void) {
                 case 2:
                     // Autos werden Rot-Gelb Fußgänger werden Rot
                     if (getMsTimer() > start+ 7000) {
-
+                        auto_ampel(ROTGELB);
+                        fuss_ampel(ROT);
 
                         changePhases(3);
                         return;
@@ -78,7 +107,8 @@ int main(void) {
                 case 3:
                     // Autos werden Grün Fußgänger bleiben Rot
                     if (getMsTimer() > start+ 8000) {
-
+                        auto_ampel(GRUEN);
+                        fuss_ampel(ROT);
 
                         lock=false;
                         return;
@@ -96,16 +126,18 @@ int main(void) {
         }
         
     }
+
+    uint8_t sw_alt= 0;
+
+
+    changePhases(3);
        
     while (1) {
-        uint8_t sw= !( PINC & ( 1 << 3 ) );
-        if(nextEvent < getMsTimer()) {
-            if (sw_alt < sw) {
-                PORTC ^= (1<<5);
-            }
-            sw_alt=sw;
+        uint8_t sw= !( PINB & ( 1 << 1 ) );
+        if (sw_alt < sw) {
+            keyPress();
         }
-         
+        sw_alt=sw;
     }
 }
 
