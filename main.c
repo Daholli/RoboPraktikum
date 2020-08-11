@@ -29,7 +29,7 @@ int main(void) {
         if (sw_alt < sw) {
             PORTC ^= (1<<5);
         } else if (sw_alt > sw) {
-            PORTC ^= (1<<5);
+
         } else {
 
         }
