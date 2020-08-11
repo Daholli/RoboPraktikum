@@ -32,6 +32,7 @@ int main(void) {
                 PORTC ^= (1<<5);
             }  
         } 
+        sw_alt=sw;
     }
 }
 
