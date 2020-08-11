@@ -23,16 +23,17 @@ int main(void) {
 
     uint8_t sw_alt = 0;
     DDRC |= (1<<5);
+    PORTC |= (1<<5);
        
     while (1) {
         uint8_t sw= !( PINC & ( 1 << 3 ) );
-        if (sw_alt < sw) {
-            if(nextEvent < getMsTimer()) {
-                nextEvent += delay;
+        if(nextEvent < getMsTimer()) {
+            nextEvent += delay;
+            if (sw_alt < sw) {
                 PORTC ^= (1<<5);
             }  
+            sw_alt=sw;
         } 
-        sw_alt=sw;
     }
 }
 
