@@ -26,15 +26,6 @@ int main(void) {
     DDRC |= (1 << 1); // FußRot
     DDRC |= (1 << 0); // FußGrün
 
-
-    PORTC |=  (1<<5);
-    PORTC |=  (1<<4);
-    PORTC |=  (1<<3);
-    PORTC |=  (1<<1);
-    PORTC |=  (1<<0);
-
-
-
     uint32_t start;
     int lock = 0;
 
@@ -80,7 +71,7 @@ int main(void) {
     }
 
     void changePhases(int phases) {
-        while(getMsTimer() > start+10000) {
+        while(getMsTimer() < start+10000) {
             switch(phases) {
                 case 0: 
                     // Autos werden Gelb Fußgänger bleiben Rot
