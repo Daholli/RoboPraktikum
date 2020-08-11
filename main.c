@@ -19,7 +19,7 @@ int main(void) {
 
 	init();
     const uint16_t delay = 50;
-    uint32_t nextEvent=getMsTimer()+delay
+    uint32_t nextEvent = getMsTimer()+delay;
 
     uint8_t sw_alt = 0;
     DDRC |= (1<<5);
