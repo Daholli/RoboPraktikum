@@ -18,16 +18,22 @@ int main(void) {
 	// Initialisierung ausfuehren
 
 	init();
+
+    const uint16_t delay=1000;
+    uint32_t nextEvent=getMsTimer()+delay;
+
+
     DDRC |= (1<<5);
 
 	while (1) {
-        _delay_ms(500);
-        if( PINC & (1 << 5)) {
-            PORTC &= ~(1<<5);
-        } else {
-            PORTC |= (1<<5);
-
-    }
+        if(nextEvent<getMsTimer()) {
+            nextEvent += delay;
+            if( PINC & (1 << 5)) {
+                PORTC &= ~(1<<5);
+            } else {
+                PORTC |= (1<<5);
+            }
+        }
 	}
 }
 
