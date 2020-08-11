@@ -27,11 +27,11 @@ int main(void) {
     while (1) {
         uint8_t sw= !( PINC & ( 1 << 3 ) );
         if (sw_alt < sw) {
-            PORTC |= (1<<5);
+            PORTC ^= (1<<5);
         } else if (sw_alt > sw) {
-            PORTC |= (1<<5);
+            PORTC ^= (1<<5);
         } else {
-            PORTC &= ~(1<<5);
+
         }
         sw_alt=sw;
          
