@@ -86,7 +86,8 @@ int main(void) {
         uart_puts("\n\rEnter the first Number\n\r");
         for(i=0; i < sizeof(first); i++){
             c = uart_getc();
-            if(c == '\n') {
+            if(c == '\r') {
+                uart_puts(first + '\0');
                 break;
             }
             first[i] = c;
@@ -94,7 +95,8 @@ int main(void) {
         uart_puts("\n\rEnter the second Number\n\r");
         for(i=0; i < sizeof(second); i++){
             c = uart_getc();
-            if(c == '\n') {
+            if(c == '\r') {
+                uart_puts(second + '\0');
                 break;
             }
             second[i] = c;
@@ -113,7 +115,7 @@ int main(void) {
                 result = atoi(first) / atoi(second); 
                 break;
         }
-        uart_puts("Your result is:\n\r");
+        uart_puts("\n\rYour result is:\n\r");
         ftoa(result, res, 4);
         uart_puts(res);
         uart_puts("\n\r"); 
