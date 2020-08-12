@@ -115,7 +115,7 @@ int main(void) {
                 result = atoi(first) * atoi(second); 
                 break;
             case '/':
-                result = atoi(first) / atoi(second); 
+                result = atoi(first) / (float)atoi(second); 
                 break;
             default:
                 uart_puts("Faulty operator\n\r");
