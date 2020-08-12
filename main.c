@@ -80,8 +80,6 @@ int main(void) {
     char res[10];
     float result;
     while(1) {
-        first[] = "";
-        second[] = "";
         result = 0;
         uart_puts("Enter operator (+ - * /)\n\r");
         op = uart_getc();
@@ -97,13 +95,14 @@ int main(void) {
             first[i] = c;
         }
         uart_puts("\n\rEnter the second Number\n\r");
-        for(i=0; i < sizeof(second); i++){
+        int j;
+        for(j=0; j < sizeof(second); j++){
             c = uart_getc();
             if(c == '\r') {
                 uart_puts(second + '\0');
                 break;
             }
-            second[i] = c;
+            second[j] = c;
         }
         switch(op) {
             case '+':
