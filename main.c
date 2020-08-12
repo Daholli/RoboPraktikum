@@ -66,6 +66,8 @@ void changePhases(int phases) {
                 if (getMsTimer() > start+ 1000) {
                     auto_ampel(GELB);
                     fuss_ampel(ROTf);
+                    lock = 1;
+                    PORTB |= (1 << 1);
 
                     changePhases(1);
                     return;
@@ -110,8 +112,6 @@ void keyPress() {
     start = getMsTimer();
     if(!lock) {
         changePhases(0);
-        lock = 1;
-        PORTB |= (1 << 1);
     }        
 }
 
