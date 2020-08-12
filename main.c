@@ -118,7 +118,7 @@ int main(void) {
                 result = atoi(first) / (float)atoi(second); 
                 break;
             default:
-                uart_puts("Faulty operator\n\r");
+                uart_puts(" is a faulty operator\n\r");
         }
         uart_puts("\n\rYour result is:\n\r");
         ftoa(result, res, 4);
