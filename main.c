@@ -24,10 +24,11 @@ int main(void) {
     //const uint16_t delay = 1000;
     //uint32_t nextEvent = getMsTimer()+delay;
     int k = 0;
-    int adc;
+    uint16_t adc;
     while(1) {
         adc = getADCValue(k);
         uart_puti(adc);         
+        uart_puts("\n\r");
     }
 }
 
