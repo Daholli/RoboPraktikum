@@ -21,10 +21,15 @@ int main(void) {
     //const uint16_t delay = 1000;
     //uint32_t nextEvent = getMsTimer()+delay;
     unsigned char c;
-    char String[4];
+    int Stringlength = 4;
+    char String[Stringlength+2];
     while(1) {
         int i;
-        for(i=0; i < sizeof(String); i++){
+        
+        String[Stringlength] = "\n"
+        String[Stringlength+1] = "\r"
+        
+        for(i=0; i < sizeof(String)-2; i++){
             c = uart_getc();
             String[i] = c;
         }
