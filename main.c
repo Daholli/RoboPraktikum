@@ -82,6 +82,7 @@ int main(void) {
     while(1) {
         uart_puts("Enter operator (+ - * /)\n\r");
         op = uart_getc();
+        uart_putc(op);
         int i; 
         uart_puts("\n\rEnter the first Number\n\r");
         for(i=0; i < sizeof(first); i++){
@@ -116,6 +117,7 @@ int main(void) {
                 break;
         }
         uart_puts("\n\rYour result is:\n\r");
+        uart_puts(first+op+second+ "\n\r");
         ftoa(result, res, 4);
         uart_puts(res);
         uart_puts("\n\r"); 
