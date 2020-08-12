@@ -124,6 +124,10 @@ int main(void) {
         ftoa(result, res, 4);
         uart_puts(res);
         uart_puts("\n\r"); 
+        memset(first,0, sizeof(first)); 
+        memset(second,0, sizeof(second)); 
+
+        
     }
 }
 
