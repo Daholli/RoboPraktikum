@@ -18,14 +18,17 @@ int main(void) {
 	// Initialisierung ausfuehren
 
 	init();
-    const uint16_t delay = 2000;
+    const uint16_t delay = 1000;
     uint32_t nextEvent = getMsTimer()+delay;
-    char s[] = "Hello World!\n\r";
+    unsigned char c;
+    char String[4];
     while(1) {
-        if(nextEvent < getMsTimer()) {
-            nextEvent += delay;
-            uart_puts(s);
+        for(int i=0; i < sizeof(String); i++){
+            c = uart_getc();
+            String[i] = c;
         }
+        uart_puts(String);
+        
     }
 }
 
