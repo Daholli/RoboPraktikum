@@ -15,8 +15,18 @@
 
 void init();
 
-int intToStr(int x, char str[], int d) 
-{ 
+void reverse(char* str, int len) {
+    int i = 0, j = len - 1, temp;
+    while (i < j) {
+        temp = str[i];
+        str[i] = str[j];
+        str[j] = temp;
+        i++;
+        j--;
+    }
+}
+
+int intToStr(int x, char str[], int d) { 
     int i = 0; 
     while (x) { 
         str[i++] = (x % 10) + '0'; 
@@ -33,8 +43,7 @@ int intToStr(int x, char str[], int d)
     return i; 
 } 
 
-void ftoa(float n, char* res, int afterpoint) 
-{ 
+void ftoa(float n, char* res, int afterpoint) { 
     // Extract integer part 
     int ipart = (int)n; 
   
