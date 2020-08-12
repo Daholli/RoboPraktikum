@@ -11,6 +11,7 @@
 #include "timer.h"
 #include "servo.h"
 #include "stdlib.h"
+#include "string.h"
 
 
 void init();
