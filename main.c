@@ -25,6 +25,7 @@ int main(void) {
     char String[len+1];
     char end = '\0';
     while(1) {
+        uart_puts("Enter String of length %s\n\r", len)
         int i; 
         for(i=0; i < sizeof(String)-1; i++){
             c = uart_getc();
