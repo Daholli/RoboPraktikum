@@ -94,6 +94,7 @@ void changePhases(int phases) {
                     fuss_ampel(ROTf);
 
                     lock=0;
+                    PORTB &= ~(1 << 1);
                     return;
             case 4:
                     // Default 
@@ -110,6 +111,7 @@ void keyPress() {
     if(!lock) {
         changePhases(0);
         lock = 1;
+        PORTB |= (1 << 1);
     }        
 }
 
@@ -118,6 +120,7 @@ int main(void) {
 	// Initialisierung ausfuehren
 
 	init();
+    DDRB |= (1 << 1); // Lock-LED
 
     DDRC |= (1 << 5); // AutoRot
     DDRC |= (1 << 4); // AutoGelb
