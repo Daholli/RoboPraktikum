@@ -28,7 +28,8 @@ int main(void) {
     uint16_t adc;
     while(1) {
         adc = getADCValue(k);
-        uart_puts(itoa(adc, buffer, 10));
+        itoa(adc, buffer, 10);
+        uart_puts(buffer);
         //uart_puti(adc);         
         uart_puts("\n\r");
     }
