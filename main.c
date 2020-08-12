@@ -24,12 +24,21 @@ int main(void) {
     //const uint16_t delay = 1000;
     //uint32_t nextEvent = getMsTimer()+delay;
     //char buffer[255];
+    //
+    DDRB |= (1 << 1);
+
     int k = 0;
     uint16_t adc;
+    int threshold = 500;
 
     while(1) {
         uart_puts("\n\r");
         adc = getADCValue(k);
+        if(adc < threshold) {
+            PORTB |= (1<<1);
+        } else {
+            PORTB &= ~(1<<1);
+        }
         uart_puti(adc);
         //uart_puti(adc);         
     }
