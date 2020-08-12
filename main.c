@@ -25,7 +25,7 @@ int main(void) {
     char String[len+1];
     char end = '\0';
     while(1) {
-        uart_puts("Enter String of length 4\n\r", );
+        uart_puts("Enter String of length 4\n\r");
         int i; 
         for(i=0; i < sizeof(String)-1; i++){
             c = uart_getc();
