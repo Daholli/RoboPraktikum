@@ -34,9 +34,9 @@ int main(void) {
     while(1) {
         uart_puts("\n\r");
         adc = getADCValue(k);
-        if(adc < threshold) {
+        if(adc < threshold-50) {
             PORTB |= (1<<1);
-        } else {
+        } else if (adc > threshold+50){
             PORTB &= ~(1<<1);
         }
         uart_puti(adc);
