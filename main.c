@@ -80,9 +80,12 @@ int main(void) {
     char res[10];
     float result;
     while(1) {
+        first = "";
+        second = "";
+        result = 0;
         uart_puts("Enter operator (+ - * /)\n\r");
         op = uart_getc();
-        uart_puts(op + '\0');
+        uart_putc(op);
         int i; 
         uart_puts("\n\r Enter the first Number\n\r");
         for(i=0; i < sizeof(first); i++){
@@ -115,6 +118,8 @@ int main(void) {
             case '/':
                 result = atoi(first) / atoi(second); 
                 break;
+            default:
+                uart_puts("Faulty operator\n\r")
         }
         uart_puts("\n\rYour result is:\n\r");
         ftoa(result, res, 4);
