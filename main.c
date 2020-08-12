@@ -134,6 +134,7 @@ int main(void) {
         if (sw_alt > sw) {
             keyPress();
         }
+        sw_alt=sw;
     }
 }
 
