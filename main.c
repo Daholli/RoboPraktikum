@@ -23,11 +23,13 @@ int main(void) {
 	init();
     //const uint16_t delay = 1000;
     //uint32_t nextEvent = getMsTimer()+delay;
+    char[255] buffer;
     int k = 0;
     uint16_t adc;
     while(1) {
         adc = getADCValue(k);
-        uart_puti(adc);         
+        uart_puts(itoa(adc, buffer, 10));
+        //uart_puti(adc);         
         uart_puts("\n\r");
     }
 }
