@@ -23,8 +23,8 @@ int main(void) {
     unsigned char c;
     char String[4];
     while(1) {
-        int i = 0;
-        for(i < sizeof(String); i++){
+        int i;
+        for(i=0; i < sizeof(String); i++){
             c = uart_getc();
             String[i] = c;
         }
