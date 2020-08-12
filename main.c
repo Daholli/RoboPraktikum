@@ -105,15 +105,13 @@ void changePhases(int phases) {
     }
 }
 
-
-    void keyPress() {
-        start = getMsTimer();
-        if(!lock) {
-            changePhases(0);
-            lock = 1;
-        }
-        
-    }
+void keyPress() {
+    start = getMsTimer();
+    if(!lock) {
+        changePhases(0);
+        lock = 1;
+    }        
+}
 
 
 int main(void) {
@@ -128,8 +126,17 @@ int main(void) {
     DDRC |= (1 << 1); // FußRot
     DDRC |= (1 << 0); // FußGrün
 
-
     changePhases(4);
+    lock =1;
+    if(lock) {
+        PORTC |=  (1<<5);
+        PORTC |=  (1<<4);
+        PORTC |=  (1<<3);
+        PORTC |=  (1<<1);
+        PORTC |=  (1<<0);
+        lock=0;
+        
+    }
        
     uint8_t sw_alt= 0;
     while (1) {
