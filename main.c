@@ -65,7 +65,7 @@ void changePhases(int phases) {
             // Autos werden Gelb Fußgänger bleiben Rot
                 if (getMsTimer() > start+ 1000) {
                     auto_ampel(GELB);
-                    fuss_ampel(ROT);
+                    fuss_ampel(ROTf);
 
                     changePhases(1);
                     return;
@@ -74,7 +74,7 @@ void changePhases(int phases) {
                 // Autos werden Rot Fußgänger werden Grün
                 if (getMsTimer() > start+ 2000) {
                     auto_ampel(ROT);
-                    fuss_ampel(GRUEN);
+                    fuss_ampel(GRUENf);
                     changePhases(2);
                     return;
                 }
@@ -82,7 +82,7 @@ void changePhases(int phases) {
                 // Autos werden Rot-Gelb Fußgänger werden Rot
                 if (getMsTimer() > start+ 7000) {
                     auto_ampel(ROTGELB);
-                    fuss_ampel(ROT);
+                    fuss_ampel(ROTf);
 
                     changePhases(3);
                     return;
@@ -91,14 +91,14 @@ void changePhases(int phases) {
                 // Autos werden Grün Fußgänger bleiben Rot
                 if (getMsTimer() > start+ 8000) {
                     auto_ampel(GRUEN);
-                    fuss_ampel(ROT);
+                    fuss_ampel(ROTf);
 
                     lock=0;
                     return;
             case 4:
                     // Default 
                     auto_ampel(GRUEN);
-                    fuss_ampel(ROT);
+                    fuss_ampel(ROTf);
                     return;
                 }
         }
