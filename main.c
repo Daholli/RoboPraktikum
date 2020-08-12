@@ -91,16 +91,16 @@ int main(void) {
             second[i] = c;
         }
         switch(op) {
-            case +:
+            case "+":
                 result = atoi(first) + atoi(second); 
                 break;
-            case -:
+            case "-":
                 result = atoi(first) - atoi(second); 
                 break;
-            case *:
+            case "*":
                 result = atoi(first) * atoi(second); 
                 break;
-            case /:
+            case "/":
                 result = atoi(first) / atoi(second); 
                 break;
         }
