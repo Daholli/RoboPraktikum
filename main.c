@@ -15,7 +15,7 @@
 void init();
     
 uint32_t start;
-int lock = 0;
+uint8_t lock = 0;
     
 typedef enum {ROT, ROTGELB, GELB, GRUEN} Autos;
 typedef enum {ROTf, GRUENf} Fuss;
