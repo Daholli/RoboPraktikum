@@ -82,9 +82,9 @@ int main(void) {
     while(1) {
         uart_puts("Enter operator (+ - * /)\n\r");
         op = uart_getc();
-        uart_putc(op);
+        uart_puts(op + '\0');
         int i; 
-        uart_puts("\n\rEnter the first Number\n\r");
+        uart_puts("\n\r Enter the first Number\n\r");
         for(i=0; i < sizeof(first); i++){
             c = uart_getc();
             if(c == '\r') {
