@@ -21,18 +21,17 @@ int main(void) {
     //const uint16_t delay = 1000;
     //uint32_t nextEvent = getMsTimer()+delay;
     unsigned char c;
-    char String[4];
-    char nextline[] = "\n\r";
+    int len = 4;
+    char String[len+1];
+    char end = '\O';
     while(1) {
-        int i;
-        
-        
-        for(i=0; i < sizeof(String); i++){
+        int i; 
+        for(i=0; i < sizeof(String)-1; i++){
             c = uart_getc();
             String[i] = c;
         }
+        String[len] = end;
         uart_puts(String);
-        uart_puts(nextline);
         
     }
 }
