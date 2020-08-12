@@ -23,7 +23,7 @@ int main(void) {
 	init();
     //const uint16_t delay = 1000;
     //uint32_t nextEvent = getMsTimer()+delay;
-    char[255] buffer;
+    char buffer[255];
     int k = 0;
     uint16_t adc;
     while(1) {
