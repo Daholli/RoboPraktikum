@@ -22,9 +22,10 @@ int main(void) {
     uint32_t nextEvent = getMsTimer()+delay;
     char s[] = "Hello World!\n\r";
     while(1) {
-        if(nextEvent < getMsTimer())
+        if(nextEvent < getMsTimer()) {
             nextEvent += delay;
             uart_puts(s);
+        }
     }
 }
 
