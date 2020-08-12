@@ -26,8 +26,8 @@ int main(void) {
     while(1) {
         int i;
         
-        String[Stringlength] = "\n"
-        String[Stringlength+1] = "\r"
+        String[Stringlength] = "\n";
+        String[Stringlength+1] = "\r";
         
         for(i=0; i < sizeof(String)-2; i++){
             c = uart_getc();
