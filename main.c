@@ -29,7 +29,7 @@ int main(void) {
 
     int k = 0;
     uint16_t adc;
-    int threshold = 500;
+    int threshold = 250;
 
     while(1) {
         uart_puts("\n\r");
