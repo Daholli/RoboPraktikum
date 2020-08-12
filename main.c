@@ -86,7 +86,7 @@ int main(void) {
         uart_puts("\n\rEnter the first Number\n\r");
         for(i=0; i < sizeof(first); i++){
             c = uart_getc();
-            if(c == "\n") {
+            if(c == '\n') {
                 break;
             }
             first[i] = c;
@@ -94,22 +94,22 @@ int main(void) {
         uart_puts("\n\rEnter the second Number\n\r");
         for(i=0; i < sizeof(second); i++){
             c = uart_getc();
-            if(c == "\n") {
+            if(c == '\n') {
                 break;
             }
             second[i] = c;
         }
         switch(op) {
-            case "+":
+            case '+':
                 result = atoi(first) + atoi(second); 
                 break;
-            case "-":
+            case '-':
                 result = atoi(first) - atoi(second); 
                 break;
-            case "*":
+            case '*':
                 result = atoi(first) * atoi(second); 
                 break;
-            case "/":
+            case '/':
                 result = atoi(first) / atoi(second); 
                 break;
         }
