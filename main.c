@@ -23,7 +23,7 @@ int main(void) {
     unsigned char c;
     int len = 4;
     char String[len+1];
-    char end = '\O';
+    char end = '\0';
     while(1) {
         int i; 
         for(i=0; i < sizeof(String)-1; i++){
