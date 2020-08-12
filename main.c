@@ -130,7 +130,7 @@ int main(void) {
        
     uint8_t sw_alt= 0;
     while (1) {
-        uint8_t sw= !( PINB & ( 1 << 1 ) );
+        uint8_t sw= !( PINB & ( 1 << 5 ) );
         if (sw_alt < sw) {
             keyPress();
         }
