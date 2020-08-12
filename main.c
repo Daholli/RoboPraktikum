@@ -117,7 +117,6 @@ int main(void) {
                 break;
         }
         uart_puts("\n\rYour result is:\n\r");
-        uart_puts(first+op+second+ "\n\r");
         ftoa(result, res, 4);
         uart_puts(res);
         uart_puts("\n\r"); 
