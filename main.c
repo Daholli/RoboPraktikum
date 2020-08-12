@@ -18,7 +18,7 @@ int main(void) {
 	// Initialisierung ausfuehren
 
 	init();
-    const uint16_t delay = 1000;
+    const uint16_t delay = 2000;
     uint32_t nextEvent = getMsTimer()+delay;
     const char s[] = "Hello World!\n\r";
     while(1) {
