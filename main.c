@@ -24,7 +24,7 @@ int main(void) {
     while(1) {
         if(nextEvent < getMsTimer())
             nextEvent += delay;
-            uart_put(s);
+            uart_puts(s);
     }
 }
 
