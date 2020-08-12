@@ -20,7 +20,7 @@ int main(void) {
 	init();
     const uint16_t delay = 1000;
     uint32_t nextEvent = getMsTimer()+delay;
-    const s = "Hello World!\n\r";
+    const char s[] = "Hello World!\n\r";
     while(1) {
         if(nextEvent < getMsTimer())
             nextEvent += delay;
