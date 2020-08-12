@@ -26,12 +26,13 @@ int main(void) {
     char buffer[255];
     int k = 0;
     uint16_t adc;
+
     while(1) {
+        uart_puts("\n\r");
         adc = getADCValue(k);
         itoa(adc, buffer, 10);
         uart_puts(buffer);
         //uart_puti(adc);         
-        uart_puts("\n\r");
     }
 }
 
