@@ -14,7 +14,7 @@
 
 void init();
     
-uint32_t start = getMsTimer();
+uint32_t start;
 int lock = 0;
     
 typedef enum {ROT, ROTGELB, GELB, GRUEN} Autos;
