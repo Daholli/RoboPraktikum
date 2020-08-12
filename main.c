@@ -32,6 +32,7 @@ int main(void) {
         }
         String[len] = end;
         uart_puts(String);
+        uart_putc('\n')
         
     }
 }
