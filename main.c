@@ -48,7 +48,7 @@ int main(void) {
             uart_puti(counter);
         }
         counter=255;
-        while(counter>=lowerlimit) {
+        while(counter>lowerlimit) {
             _delay_us(10000);
             setPWM(counter);
             counter--;
