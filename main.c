@@ -32,8 +32,9 @@ int main(void) {
     //int k = 0;
     //uint16_t adc;
     //int threshold = 250;
-	DDRD |= (1 << 5);	// Pin 5 an PORTD auf Ausgang stellen
-	TCCR0A = (1 << WGM00) | (1 << COM0A1) | (1 << COM0B1) ;	// Timer/Counter als nicht
+	DDRB |= (1 << 1);	// Pin 5 an PORTD auf Ausgang stellen
+	TCCR1A = (1 << WGM11) | (1 << COM1A0) | (1 << COM1A1) ;	// Timer/Counter
+	TCCR1B = (1 << CS01);	// Takt von CK / 64 generieren
 
     uint8_t counter=0;
     uint8_t upperlimit = 255;
@@ -44,18 +45,18 @@ int main(void) {
         while(counter<upperlimit) {
             _delay_us(5000);
             setPWM(counter);
-            OCR0B = counter;
+            OCR1A = (uint16_t)counter*4;
             counter++;
-            //uart_puts("\n\r increment: ");
-            //uart_puti(counter);
+            uart_puts("\n\r increment: ");
+            uart_puti(counter);
         }
         while(counter>lowerlimit) {
             _delay_us(5000);
             setPWM(counter);
+            OCR1A = (uint16_t)counter*4;
             counter--;
-            OCR0B = counter;
-            //uart_puts("\n\r decrement: ");
-            //uart_puti(counter);
+            uart_puts("\n\r decrement: ");
+            uart_puti(counter);
         }
 
     }
