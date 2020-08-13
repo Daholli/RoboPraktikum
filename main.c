@@ -39,10 +39,12 @@ int main(void) {
         //adc = getADCValue(k);
 
         while(counter<=255) {
+            _delay_us(10000);
             setPWM(counter);
             counter++;
         }
         while(counter>=0) {
+            _delay_us(10000);
             setPWM(counter);
             counter--;
         }
