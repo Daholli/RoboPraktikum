@@ -48,9 +48,9 @@ int main(void) {
         int i;
         for(i=0; i < 255; i++) {
             if(timer >= adc) {
-                clearBit(PORTB, 1)
+                clearBit(PORTB, 1);
             } else {
-            setBit(PORTB, 1);
+                setBit(PORTB, 1);
             }
         }
         timer =0;
