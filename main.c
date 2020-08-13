@@ -21,11 +21,6 @@ void init();
 #define toggleBit(reg, bit) (reg ^= (1 << bit))
 #define clearFlag(reg, bit) (reg |= (1<<bit))
 
-uint8_t timer =0;
-
-ISR(timer) {
-
-}
     
 int main(void) {
 	// Initialisierung ausfuehren
@@ -53,9 +48,11 @@ int main(void) {
                 setBit(PORTB, 1);
             }
             timer++;
+            uart_puts("\n\r Timer: ");
+            uart_puti(timer);
         }
         timer =0;
-        uart_puts("\n\r");
+        uart_puts("\n\r ADC: ");
         uart_puti(adc);
         //uart_puti(adc);         
     }
