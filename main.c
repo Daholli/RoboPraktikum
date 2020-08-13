@@ -40,7 +40,7 @@ int main(void) {
     while(1) {
         //adc = getADCValue(k);
         counter=0;
-        while(counter<=upperlimit) {
+        while(counter<upperlimit) {
             _delay_us(10000);
             setPWM(counter);
             counter++;
