@@ -35,7 +35,7 @@ int main(void) {
 
     while(1) {
         //adc = getADCValue(k);
-        setPWM(123);
+        setPWM(255);
 
     }
 }
