@@ -32,6 +32,7 @@ int main(void) {
     //int k = 0;
     //uint16_t adc;
     //int threshold = 250;
+	DDRD |= (1 << 5);	// Pin 5 an PORTD auf Ausgang stellen
 
     uint8_t counter=0;
     uint8_t upperlimit = 255;
