@@ -44,14 +44,15 @@ int main(void) {
     uint8_t timer =0;
 
     while(1) {
+        _delay_us(15624);
         adc = getADCValue(k);
-        int i;
-        for(i=0; i < 255; i++) {
+        while(timer < 255) {
             if(timer >= adc) {
                 clearBit(PORTB, 1);
             } else {
                 setBit(PORTB, 1);
             }
+            timer++;
         }
         timer =0;
         uart_puts("\n\r");
