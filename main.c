@@ -33,6 +33,7 @@ int main(void) {
     //uint16_t adc;
     //int threshold = 250;
 	DDRD |= (1 << 5);	// Pin 5 an PORTD auf Ausgang stellen
+	TCCR0A = (1 << WGM00) | (1 << COM0B1);	// Timer/Counter als nicht
 
     uint8_t counter=0;
     uint8_t upperlimit = 255;
