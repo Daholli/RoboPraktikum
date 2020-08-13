@@ -34,20 +34,22 @@ int main(void) {
     //int threshold = 250;
 
     uint8_t counter;
+    uint8_t upperlimit = 255;
+    uint8_t lowerlimit = 0;
 
     while(1) {
         //adc = getADCValue(k);
         counter=0;
-        while(counter<=255) {
-            _delay_us(100000);
+        while(counter<=upperlimit) {
+            _delay_us(10000);
             setPWM(counter);
             counter++;
             uart_puts("\n\r increment: ");
             uart_puti(counter);
         }
         counter=255;
-        while(counter>=0) {
-            _delay_us(100000);
+        while(counter>=lowerlimit) {
+            _delay_us(10000);
             setPWM(counter);
             counter--;
             uart_puts("\n\r decrement: ");
