@@ -39,10 +39,10 @@ int main(void) {
     uint8_t timer =0;
 
     while(1) {
-        _delay_us(1000000);
+        _delay_us(100000);
         adc = getADCValue(k);
         while(timer < 255) {
-            if(timer <= adc) {
+            if(timer >= adc) {
                 clearBit(PORTB, 1);
             } else {
                 setBit(PORTB, 1);
