@@ -42,14 +42,14 @@ int main(void) {
             _delay_us(10000);
             setPWM(counter);
             counter++;
-            uart_puts("\n\r increment: ")
+            uart_puts("\n\r increment: ");
             uart_puti(counter);
         }
         while(counter>=0) {
             _delay_us(10000);
             setPWM(counter);
             counter--;
-            uart_puts("\n\r decrement: ")
+            uart_puts("\n\r decrement: ");
             uart_puti(counter);
         }
 
