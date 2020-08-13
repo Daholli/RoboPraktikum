@@ -44,7 +44,7 @@ int main(void) {
     uint8_t timer =0;
 
     while(1) {
-        _delay_us(15624);
+        _delay_us(100000);
         adc = getADCValue(k);
         while(timer < 255) {
             if(timer >= adc) {
