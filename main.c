@@ -52,8 +52,8 @@ int main(void) {
             //uart_puti(timer);
         }
         timer =0;
-        uart_puts("\n\r ADC: ");
-        uart_puti(adc);
+        //uart_puts("\n\r ADC: ");
+        //uart_puti(adc);
         //uart_puti(adc);         
     }
 }
