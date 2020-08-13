@@ -45,7 +45,7 @@ int main(void) {
         while(counter<upperlimit) {
             _delay_us(5000);
             setPWM(counter);
-            OCR1A = (uint16_t)counter;
+            OCR1A = (uint16_t)counter*4;
             counter++;
             uart_puts("\n\r increment: ");
             uart_puti(counter);
@@ -53,7 +53,7 @@ int main(void) {
         while(counter>lowerlimit) {
             _delay_us(5000);
             setPWM(counter);
-            OCR1A = (uint16_t)counter;
+            OCR1A = (uint16_t)counter*4;
             counter--;
             uart_puts("\n\r decrement: ");
             uart_puti(counter);
