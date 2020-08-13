@@ -44,16 +44,16 @@ int main(void) {
             _delay_us(5000);
             setPWM(counter);
             counter++;
-            uart_puts("\n\r increment: ");
-            uart_puti(counter);
+            //uart_puts("\n\r increment: ");
+            //uart_puti(counter);
         }
         counter=255;
         while(counter>lowerlimit) {
             _delay_us(5000);
             setPWM(counter);
             counter--;
-            uart_puts("\n\r decrement: ");
-            uart_puti(counter);
+            //uart_puts("\n\r decrement: ");
+            //uart_puti(counter);
         }
 
     }
