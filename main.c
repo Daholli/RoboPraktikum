@@ -48,8 +48,8 @@ int main(void) {
                 setBit(PORTB, 1);
             }
             timer++;
-            uart_puts("\n\r Timer: ");
-            uart_puti(timer);
+            //uart_puts("\n\r Timer: ");
+            //uart_puti(timer);
         }
         timer =0;
         uart_puts("\n\r ADC: ");
