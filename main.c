@@ -38,7 +38,7 @@ int main(void) {
     while(1) {
         //adc = getADCValue(k);
         counter=0;
-        while(counter<255) {
+        while(counter<=255) {
             _delay_us(100000);
             setPWM(counter);
             counter++;
