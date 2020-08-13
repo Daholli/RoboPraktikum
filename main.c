@@ -33,13 +33,12 @@ int main(void) {
     //uint16_t adc;
     //int threshold = 250;
 
-    uint8_t counter;
+    uint8_t counter=0;
     uint8_t upperlimit = 255;
     uint8_t lowerlimit = 0;
 
     while(1) {
         //adc = getADCValue(k);
-        counter=0;
         while(counter<upperlimit) {
             _delay_us(5000);
             setPWM(counter);
@@ -47,7 +46,6 @@ int main(void) {
             //uart_puts("\n\r increment: ");
             //uart_puti(counter);
         }
-        counter=255;
         while(counter>lowerlimit) {
             _delay_us(5000);
             setPWM(counter);
