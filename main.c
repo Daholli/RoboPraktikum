@@ -33,9 +33,19 @@ int main(void) {
     //uint16_t adc;
     //int threshold = 250;
 
+    uint8_t counter;
+
     while(1) {
         //adc = getADCValue(k);
-        setPWM(255);
+
+        while(counter<=255) {
+            setPWM(counter);
+            counter++;
+        }
+        while(counter>=0) {
+            setPWM(counter);
+            counter--;
+        }
 
     }
 }
