@@ -47,7 +47,7 @@ int main(void) {
         _delay_us(1000000);
         adc = getADCValue(k);
         while(timer < 255) {
-            if(timer >= adc) {
+            if(timer <= adc) {
                 clearBit(PORTB, 1);
             } else {
                 setBit(PORTB, 1);
