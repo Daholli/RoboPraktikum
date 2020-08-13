@@ -15,7 +15,11 @@
 
 void init();
 
- 
+void timer0_init() {
+    TCCR0 |= (1 << CS00);
+    TCNT0 = 0;
+}
+
     
 int main(void) {
 	// Initialisierung ausfuehren
@@ -26,19 +30,20 @@ int main(void) {
     //char buffer[255];
     //
     DDRB |= (1 << 1);
+    
+    uint8_t timer;
 
     int k = 0;
     uint16_t adc;
     int threshold = 250;
 
     while(1) {
-        uart_puts("\n\r");
         adc = getADCValue(k);
-        if(adc < threshold-50) {
-            PORTB |= (1<<1);
-        } else if (adc > threshold+50){
-            PORTB &= ~(1<<1);
+        if(TCNT0 >= adc) {
+            PORTB ^= (1 << 1);
+            TCNT0 = 0; 
         }
+        uart_puts("\n\r");
         uart_puti(adc);
         //uart_puti(adc);         
     }
