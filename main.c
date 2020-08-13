@@ -39,7 +39,7 @@ int main(void) {
         //adc = getADCValue(k);
         counter=0;
         while(counter<255) {
-            _delay_us(10000);
+            _delay_us(100000);
             setPWM(counter);
             counter++;
             uart_puts("\n\r increment: ");
@@ -47,7 +47,7 @@ int main(void) {
         }
         counter=255;
         while(counter>=0) {
-            _delay_us(10000);
+            _delay_us(100000);
             setPWM(counter);
             counter--;
             uart_puts("\n\r decrement: ");
