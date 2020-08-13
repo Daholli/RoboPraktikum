@@ -43,6 +43,7 @@ int main(void) {
         while(counter<upperlimit) {
             _delay_us(5000);
             setPWM(counter);
+            OCROB = counter;
             counter++;
             //uart_puts("\n\r increment: ");
             //uart_puti(counter);
@@ -51,6 +52,7 @@ int main(void) {
             _delay_us(5000);
             setPWM(counter);
             counter--;
+            OCROB = counter;
             //uart_puts("\n\r decrement: ");
             //uart_puti(counter);
         }
