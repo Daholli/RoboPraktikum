@@ -15,11 +15,17 @@
 
 void init();
 
-void timer0_init() {
-    TCCR0 |= (1 << CS00);
-    TCNT0 = 0;
-}
 
+#define setBit(reg, bit) (reg |= (1 << bit))
+#define clearBit(reg, bit) (reg &= ~(1 << bit))
+#define toggleBit(reg, bit) (reg ^= (1 << bit))
+#define clearFlag(reg, bit) (reg |= (1<<bit))
+
+uint8_t timer =0;
+
+ISR(timer) {
+
+}
     
 int main(void) {
 	// Initialisierung ausfuehren
@@ -28,21 +34,26 @@ int main(void) {
     //const uint16_t delay = 1000;
     //uint32_t nextEvent = getMsTimer()+delay;
     //char buffer[255];
-    //
     DDRB |= (1 << 1);
     
-    uint8_t timer;
-
+    DDRD &= ~(1<<1);
+    
     int k = 0;
     uint16_t adc;
-    int threshold = 250;
+    //int threshold = 250;
+    uint8_t timer =0;
 
     while(1) {
         adc = getADCValue(k);
-        if(TCNT0 >= adc) {
-            PORTB ^= (1 << 1);
-            TCNT0 = 0; 
+        int i;
+        for(i=0; i < 255; i++) {
+            if(timer >= adc) {
+                clearBit(PORTB, 1)
+            } else {
+            setBit(PORTB, 1);
+            }
         }
+        timer =0;
         uart_puts("\n\r");
         uart_puti(adc);
         //uart_puti(adc);         
