@@ -74,7 +74,6 @@ int main(void) {
     //uint32_t nextEvent = getMsTimer()+delay;
     
     //int k = 0;
-    sei();
     setBit(UCSR0B, RXCIE0);
     setBit(UCSR0B, RXC0);
     setBit(UCSR0B, TXC0);
@@ -83,6 +82,7 @@ int main(void) {
     setBit(DDRC, 0);
 
     while(1) {
+        cli();
         if(complete){
             setBit(PORTC, 0);
             returnString(uart_string);
@@ -90,6 +90,7 @@ int main(void) {
             clearBit(PORTC, 0);
 
         } 
+        sei();
 
     }
 }
