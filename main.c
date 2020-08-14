@@ -30,7 +30,7 @@ volatile uint8_t complete;
 
 
 void returnString(char* s) {
-    while( !(UCSRE0 & ( 1 << UDRE0 )) );
+    while( !(UDRE0 & ( 1 << UDRE0 )) );
     UDR0 = s;
     complete=0;
 }
