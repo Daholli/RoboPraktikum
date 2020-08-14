@@ -32,7 +32,7 @@ void measureTime(Datatype type) {
             volatile uint8_t z=0;
             start = getMsTimer();
             int i;
-            for(i=0; i < 1000; i++) {
+            for(i=0; i < 10000; i++) {
                 z = ( z + 1 ) * 2;
             }
             end = getMsTimer();
@@ -44,7 +44,7 @@ void measureTime(Datatype type) {
             volatile uint16_t z=0;
             start = getMsTimer();
             int i;
-            for(i=0; i < 1000; i++) {
+            for(i=0; i < 10000; i++) {
                 z = ( z + 1 ) * 2;
             }
             end = getMsTimer();
@@ -56,7 +56,7 @@ void measureTime(Datatype type) {
             volatile uint32_t z=0;
             start = getMsTimer();
             int i;
-            for(i=0; i < 1000; i++) {
+            for(i=0; i < 10000; i++) {
                 z = ( z + 1 ) * 2;
             }
             end = getMsTimer();
@@ -68,7 +68,7 @@ void measureTime(Datatype type) {
             volatile float z=0;
             start = getMsTimer();
             int i;
-            for(i=0; i < 1000; i++) {
+            for(i=0; i < 10000; i++) {
                 z = ( z + 1 ) * 2;
             }
             end = getMsTimer();
@@ -84,7 +84,7 @@ int main(void) {
 	// Initialisierung ausfuehren
 
 	init();
-    //const uint16_t delay = 1000;
+    //const uint16_t delay = 10000;
     //uint32_t nextEvent = getMsTimer()+delay;
     
     //int k = 0;
