@@ -21,21 +21,34 @@ void init();
 #define toggleBit(reg, bit) (reg ^= (1 << bit))
 #define clearFlag(reg, bit) (reg |= (1<<bit))
 
+#define MAXLEN 10
+
+volatile char uart_string[MAXLEN +1] = "";
+volatile uint8_t uart_str_len = 0;
+volatile uint8_t complete;
+
+setBit(UCSR0B, RXCIE0);
 
 
-//volatile char GetString[10];
-//volatile int iterator;
 
-ISR ( USART_RX_vect ) {
-    char c = uart_getc();
-    /*if(iterator < sizeof(GetString)) {
-        GetString[iterator] = c;
-        iterator++;
-    } else {
-        uart_puts("\n\r");
-        uart_puts(GetString);
-    }*/
-    uart_putc(c);
+void returnString(char* s) {
+    uart_puts(s);
+    complete=0;
+}
+
+
+ISR(USART_RX_vect) {
+    unsigned char c;
+    if(!complete) {
+        if(c != '\n' && c != '\r' && uart_str_len < MAXLEN) {
+            uart_string[uart_str_len] = c;
+            uart_str_len++;
+        } else {
+            uart_string[uart_str_len] = '\0';
+            uart_str_count = 0;
+            complete =1;
+        }
+    }
 
 }
 
@@ -51,10 +64,11 @@ int main(void) {
 
 
     sei();
-    setBit(UCSR0B, RXCIE0);
 
     while(1) {
-        
+        if(complete){
+            returnString(uart_string);
+        } 
 
     }
 }
