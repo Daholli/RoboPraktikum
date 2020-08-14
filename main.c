@@ -27,9 +27,6 @@ volatile char uart_string[MAXLEN +1] = "";
 volatile uint8_t uart_str_len = 0;
 volatile uint8_t complete;
 
-setBit(UCSR0B, RXCIE0);
-
-
 
 void returnString(char* s) {
     uart_puts(s);
@@ -62,6 +59,7 @@ int main(void) {
     
     //int k = 0;
 
+    setBit(UCSR0B, RXCIE0);
 
     sei();
 
