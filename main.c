@@ -27,15 +27,18 @@ volatile char uart_string[MAXLEN +1] = "";
 volatile uint8_t uart_str_len = 0;
 volatile uint8_t complete;
 
+sei();
 
 void returnString(char* s) {
-    uart_puts(s);
+    while( !(UCSRA & ( 1 << UDRE )) );
+    UDR = s;
     complete=0;
 }
 
 
 ISR(USART_RX_vect) {
     unsigned char c;
+    c = UDR;
     if(!complete) {
         if(c != '\n' && c != '\r' && uart_str_len < MAXLEN) {
             uart_string[uart_str_len] = c;
@@ -61,7 +64,6 @@ int main(void) {
 
     setBit(UCSR0B, RXCIE0);
 
-    sei();
 
     while(1) {
         if(complete){
