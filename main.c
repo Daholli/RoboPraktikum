@@ -34,7 +34,7 @@ int main(void) {
     //int threshold = 250;
 	DDRB |= (1 << 1);	// Pin 5 an PORTD auf Ausgang stellen
 	TCCR1A = (1 << WGM11) | (1 << COM1A0) | (1 << COM1A1) ;	// Timer/Counter
-	TCCR1B = (1 << CS01);	// Takt von CK / 64 generieren
+	TCCR1B = (1 << CS01);	// Takt von CK / 8 generieren
 
     uint8_t counter=0;
     uint8_t upperlimit = 255;
