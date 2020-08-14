@@ -22,9 +22,9 @@ void init();
 #define toggleBit(reg, bit) (reg ^= (1 << bit))
 #define clearFlag(reg, bit) (reg |= (1<<bit))
 
-uint8_t counter=1000;
-uint8_t upperlimit = 1900;
-uint8_t lowerlimit = 1100;
+uint16_t counter=1000;
+uint16_t upperlimit = 1900;
+uint16_t lowerlimit = 1100;
 
     
 int main(void) {
