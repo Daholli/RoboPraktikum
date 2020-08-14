@@ -32,13 +32,16 @@ int main(void) {
     init();
 
     setBit(DDRB, 1);
+    setBit(DDRC, 0);
     setBit(DDRC, 5);
-
-    uint8_t k;
-    uint16_t adc;
+    
+    //uint8_t k;
+    //uint16_t adc;
 
     while(1) {
         while(counter<upperlimit) {
+            setBit(PORTC, 0);
+            clearBit(PORTC, 5);
             _delay_us(5000);
             setServo(0,counter);
             counter++;
@@ -46,6 +49,8 @@ int main(void) {
             uart_puti(counter);
         }
         while(counter>lowerlimit) {
+            setBit(PORTC, 5);
+            clearBit(PORTC, 0);
             _delay_us(5000);
             setServo(0, counter);
             counter--;
