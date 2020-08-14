@@ -27,7 +27,9 @@ uint16_t end;
 typedef enum {UINT8, UINT16, UINT32, FLOAT} Datatype;
 
 void measureTime(Datatype type, int iterations) {
-    uart_puts("Iterations: " + itoa(iterations));
+    char buffer[10];
+    itoa(iterations, buffer, 10);
+    uart_puts("Iterations: " + buffer);
     switch(type) {
         case UINT8: {
             volatile uint8_t z=0;
