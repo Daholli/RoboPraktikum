@@ -26,13 +26,14 @@ uint16_t end;
     
 typedef enum {UINT8, UINT16, UINT32, FLOAT} Datatype;
 
-void measureTime(Datatype type) {
+void measureTime(Datatype type, int iterations) {
+    uart_puts("Iterations: " + itoa(iterations));
     switch(type) {
         case UINT8: {
             volatile uint8_t z=0;
             start = getMsTimer();
             int i;
-            for(i=0; i < 10000; i++) {
+            for(i=0; i < iterations; i++) {
                 z = ( z + 1 ) * 2;
             }
             end = getMsTimer();
@@ -44,11 +45,11 @@ void measureTime(Datatype type) {
             volatile uint16_t z=0;
             start = getMsTimer();
             int i;
-            for(i=0; i < 10000; i++) {
+            for(i=0; i < iterations; i++) {
                 z = ( z + 1 ) * 2;
             }
             end = getMsTimer();
-            uart_puts("\n\r uint8 runtime: ");
+            uart_puts("\n\r uint16 runtime: ");
             uart_puti((end-start));
             return;
         }
@@ -56,11 +57,11 @@ void measureTime(Datatype type) {
             volatile uint32_t z=0;
             start = getMsTimer();
             int i;
-            for(i=0; i < 10000; i++) {
+            for(i=0; i < iterations; i++) {
                 z = ( z + 1 ) * 2;
             }
             end = getMsTimer();
-            uart_puts("\n\r uint8 runtime: ");
+            uart_puts("\n\r uint32 runtime: ");
             uart_puti((end-start));
             return;
         }
@@ -68,11 +69,11 @@ void measureTime(Datatype type) {
             volatile float z=0;
             start = getMsTimer();
             int i;
-            for(i=0; i < 10000; i++) {
+            for(i=0; i < iterations; i++) {
                 z = ( z + 1 ) * 2;
             }
             end = getMsTimer();
-            uart_puts("\n\r uint8 runtime: ");
+            uart_puts("\n\r float runtime: ");
             uart_puti((end-start));
             return; 
         }
@@ -84,15 +85,15 @@ int main(void) {
 	// Initialisierung ausfuehren
 
 	init();
-    //const uint16_t delay = 10000;
+    //const uint16_t delay = 1000;
     //uint32_t nextEvent = getMsTimer()+delay;
     
     //int k = 0;
 
-    measureTime(UINT8);
-    measureTime(UINT16);
-    measureTime(UINT32);
-    measureTime(FLOAT);
+    measureTime(UINT8, 10000);
+    measureTime(UINT16, 10000);
+    measureTime(UINT32, 10000);
+    measureTime(FLOAT, 10000);
     
 
     while(1) {
