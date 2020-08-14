@@ -28,7 +28,7 @@ typedef enum {UINT8, UINT16, UINT32, FLOAT} Datatype;
 
 void measureTime(Datatype type) {
     switch(type) {
-        case UINT8:
+        case UINT8: {
             volatile uint8_t z=0;
             start = getMsTimer();
             int i;
@@ -39,7 +39,8 @@ void measureTime(Datatype type) {
             uart_puts("\n\r uint8 runtime: ");
             uart_puti((end-start));
             return;
-        case UINT16:
+        }
+        case UINT16: { 
             volatile uint16_t z=0;
             start = getMsTimer();
             int i;
@@ -50,7 +51,8 @@ void measureTime(Datatype type) {
             uart_puts("\n\r uint8 runtime: ");
             uart_puti((end-start));
             return;
-        case UINT32:
+        }
+        case UINT32: {
             volatile uint32_t z=0;
             start = getMsTimer();
             int i;
@@ -61,7 +63,8 @@ void measureTime(Datatype type) {
             uart_puts("\n\r uint8 runtime: ");
             uart_puti((end-start));
             return;
-        case FLOAT:
+        }
+        case FLOAT: {
             volatile float z=0;
             start = getMsTimer();
             int i;
@@ -73,7 +76,6 @@ void measureTime(Datatype type) {
             uart_puti((end-start));
             return; 
         }
-
     }
 }
 
