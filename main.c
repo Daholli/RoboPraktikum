@@ -22,76 +22,36 @@ void init();
 #define toggleBit(reg, bit) (reg ^= (1 << bit))
 #define clearFlag(reg, bit) (reg |= (1<<bit))
 
-#define MAXLEN 20
-
-
-
-
-
-volatile char uart_string[MAXLEN +2] = "";
-volatile uint8_t uart_str_len = 0;
-volatile uint8_t complete;
-
-
-void returnString(volatile char* s) {
-    /*int i;
-    for(i=0; i < sizeof(s); i++){
-        while( !(UDRE0 & ( 1 << UDRE0 )) );
-        UDR0 = s[i];
-
-    }*/
-    char* output = (char*) s;
-    uart_puts("\n\r");
-    uart_puts(output);
-    complete=0;
-}
-
-
-ISR(USART_RX_vect) {
-    unsigned char c;
-    c = UDR0;
-    if(!complete) {
-        if(c != '\n' && c != '\r' && uart_str_len < MAXLEN) {
-            setBit(PORTC, 5);
-            uart_string[uart_str_len] = c;
-            uart_str_len++;
-        } else {
-            clearBit(PORTC, 5);
-            uart_string[uart_str_len] = '\0';
-            uart_str_len = 0;
-            complete =1;
-        }
-    }
-
-}
+uint8_t counter=1000;
+uint8_t upperlimit = 1900;
+uint8_t lowerlimit = 1100;
 
     
 int main(void) {
 	// Initialisierung ausfuehren
+    init();
 
-	init();
-    //const uint16_t delay = 1000;
-    //uint32_t nextEvent = getMsTimer()+delay;
-    
-    //int k = 0;
-    setBit(UCSR0B, RXCIE0);
-    setBit(UCSR0B, RXC0);
-    setBit(UCSR0B, TXC0);
-
+    setBit(DDRB, 1);
     setBit(DDRC, 5);
-    setBit(DDRC, 0);
+
+    uint8_t k;
+    uint16_t adc;
 
     while(1) {
-        cli();
-        if(complete){
-            setBit(PORTC, 0);
-            returnString(uart_string);
-        } else {
-            clearBit(PORTC, 0);
-
+        while(counter<upperlimit) {
+            _delay_us(5000);
+            setServo(0,counter);
+            counter++;
+            uart_puts("\n\r increment: ");
+            uart_puti(counter);
+        }
+        while(counter>lowerlimit) {
+            _delay_us(5000);
+            setServo(0, counter);
+            counter--;
+            uart_puts("\n\r decrement: ");
+            uart_puti(counter);
         } 
-        sei();
-
     }
 }
 
@@ -102,5 +62,5 @@ void init() {
 	ADCInit(0);		// Analoge Werte einlesen
 	PWMInit();		// Pulsweite auf D6 ausgeben 
 	timerInit();		// "Systemzeit" initialisieren
-	// servoInit(); // Servoansteuerung initialisieren
+	servoInit(); // Servoansteuerung initialisieren
 }
