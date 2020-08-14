@@ -23,22 +23,31 @@ void init();
 
 uint16_t start;
 uint16_t end;
+
+uint16_t loopstart;
+uint16_t loopend;
     
 typedef enum {UINT8, UINT16, UINT32, FLOAT} Datatype;
 
 void measureTime(Datatype type, int iterations) {
     uart_puts("\n\rIterations: ");
     uart_puti(iterations);
+    int j;
+    loopstart = getMsTimer();
+    for(j=0; j < iterations; j++){
+        asm volatile ("nop");
+    }
+    loopend = getMsTimer();
+    uint16_t looplength = loopend - loopstart;
     switch(type) {
         case UINT8: {
             volatile uint8_t z=0;
             start = getMsTimer();
             int i;
             for(i=0; i < iterations; i++) {
-                asm volatile ("nop");
                 z = ( z + 1 ) * 2;
             }
-            end = getMsTimer();
+            end = getMsTimer()-looplength;
             uart_puts("\n\r uint8 runtime: ");
             uart_puti((end-start));
             return;
@@ -48,10 +57,9 @@ void measureTime(Datatype type, int iterations) {
             start = getMsTimer();
             int i;
             for(i=0; i < iterations; i++) {
-                asm volatile ("nop");
                 z = ( z + 1 ) * 2;
             }
-            end = getMsTimer();
+            end = getMsTimer()-looplength;
             uart_puts("\n\r uint16 runtime: ");
             uart_puti((end-start));
             return;
@@ -61,10 +69,9 @@ void measureTime(Datatype type, int iterations) {
             start = getMsTimer();
             int i;
             for(i=0; i < iterations; i++) {
-                asm volatile ("nop");
                 z = ( z + 1 ) * 2;
             }
-            end = getMsTimer();
+            end = getMsTimer()-looplength;
             uart_puts("\n\r uint32 runtime: ");
             uart_puti((end-start));
             return;
@@ -74,10 +81,9 @@ void measureTime(Datatype type, int iterations) {
             start = getMsTimer();
             int i;
             for(i=0; i < iterations; i++) {
-                asm volatile ("nop");
                 z = ( z + 1 ) * 2;
             }
-            end = getMsTimer();
+            end = getMsTimer()-looplength;
             uart_puts("\n\r float runtime: ");
             uart_puti((end-start));
             return; 
