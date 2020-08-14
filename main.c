@@ -24,7 +24,7 @@ void init();
 
 
 volatile uint16_t target=1900;
-volatile uint16_t increment = 0;
+volatile uint16_t increment = 1050;
 
 ISR(TIMER1_OVF_vect) {
     if(increment<target) {
