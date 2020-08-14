@@ -34,8 +34,12 @@ volatile uint8_t complete;
 
 
 void returnString(volatile char* s) {
-    while( !(UDRE0 & ( 1 << UDRE0 )) );
-    UDR0 = s;
+    int i;
+    for(i=0; i < sizeof(s); i++){
+        while( !(UDRE0 & ( 1 << UDRE0 )) );
+        UDR0 = s[i];
+
+    }
     complete=0;
 }
 
