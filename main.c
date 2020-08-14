@@ -42,7 +42,7 @@ ISR(USART_RX_vect) {
             uart_str_len++;
         } else {
             uart_string[uart_str_len] = '\0';
-            uart_str_count = 0;
+            uart_str_len = 0;
             complete =1;
         }
     }
