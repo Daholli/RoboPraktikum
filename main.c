@@ -49,12 +49,12 @@ int main(void) {
     //uint16_t adc;
 
     while(1) {
-        _delay_us(5000);
-        setServo(0, increment);
         uart_puts("\n\r");
         uart_puti(increment);
         if(increment==target) {
             setBit(PORTC, 5);
+        } else if (increment < target) {
+            setServo(0, increment);
         } else {
             clearBit(PORTC, 5);
         }
