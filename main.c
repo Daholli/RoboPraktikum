@@ -35,6 +35,7 @@ void measureTime(Datatype type, int iterations) {
             start = getMsTimer();
             int i;
             for(i=0; i < iterations; i++) {
+                asm volatile ("nop");
                 z = ( z + 1 ) * 2;
             }
             end = getMsTimer();
@@ -47,6 +48,7 @@ void measureTime(Datatype type, int iterations) {
             start = getMsTimer();
             int i;
             for(i=0; i < iterations; i++) {
+                asm volatile ("nop");
                 z = ( z + 1 ) * 2;
             }
             end = getMsTimer();
@@ -59,6 +61,7 @@ void measureTime(Datatype type, int iterations) {
             start = getMsTimer();
             int i;
             for(i=0; i < iterations; i++) {
+                asm volatile ("nop");
                 z = ( z + 1 ) * 2;
             }
             end = getMsTimer();
@@ -71,6 +74,7 @@ void measureTime(Datatype type, int iterations) {
             start = getMsTimer();
             int i;
             for(i=0; i < iterations; i++) {
+                asm volatile ("nop");
                 z = ( z + 1 ) * 2;
             }
             end = getMsTimer();
