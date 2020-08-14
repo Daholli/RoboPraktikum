@@ -23,18 +23,19 @@ void init();
 
 
 
-volatile char GetString[10];
-volatile int iterator;
+//volatile char GetString[10];
+//volatile int iterator;
 
 ISR ( USART_RX_vect ) {
     char c = uart_getc();
-    if(iterator < sizeof(GetString)) {
+    /*if(iterator < sizeof(GetString)) {
         GetString[iterator] = c;
         iterator++;
     } else {
         uart_puts("\n\r");
         uart_puts(GetString);
-    }
+    }*/
+    uart_putc(c);
 
 }
 
