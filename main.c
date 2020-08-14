@@ -22,15 +22,25 @@ void init();
 #define toggleBit(reg, bit) (reg ^= (1 << bit))
 #define clearFlag(reg, bit) (reg |= (1<<bit))
 
-uint16_t counter=1000;
-uint16_t upperlimit = 1900;
-uint16_t lowerlimit = 1100;
 
+volatile uint16_t target=1900;
+volatile uint16_t increment = 0;
+
+ISR(TIMER1_OVF_vect) {
+    if(increment<target) {
+        increment++;
+        setBit(PORTC,0);
+    } else {
+        clearBit(PORTC, 0);
+    }
+    
+}
     
 int main(void) {
 	// Initialisierung ausfuehren
     init();
 
+    setBit(TIMSK1, TOIE1);
     setBit(DDRB, 1);
     setBit(DDRC, 0);
     setBit(DDRC, 5);
@@ -39,22 +49,15 @@ int main(void) {
     //uint16_t adc;
 
     while(1) {
-        while(counter<upperlimit) {
-            setBit(PORTC, 0);
-            clearBit(PORTC, 5);
-            setServo(0,counter);
-            counter++;
-            uart_puts("\n\r increment: ");
-            uart_puti(counter);
-        }
-        while(counter>lowerlimit) {
+        _delay_us(5000);
+        setServo(0, increment);
+        uart_puts("\n\r");
+        uart_puti(increment);
+        if(increment==target) {
             setBit(PORTC, 5);
-            clearBit(PORTC, 0);
-            setServo(0, counter);
-            counter--;
-            uart_puts("\n\r decrement: ");
-            uart_puti(counter);
-        } 
+        } else {
+            clearBit(PORTC, 5);
+        }
     }
 }
 
