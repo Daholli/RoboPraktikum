@@ -22,13 +22,13 @@ void init();
 #define toggleBit(reg, bit) (reg ^= (1 << bit))
 #define clearFlag(reg, bit) (reg |= (1<<bit))
 
-#define MAXLEN 10
+#define MAXLEN 20
 
 
 
 
 
-volatile char uart_string[MAXLEN +1] = "";
+volatile char uart_string[MAXLEN +2] = "";
 volatile uint8_t uart_str_len = 0;
 volatile uint8_t complete;
 
