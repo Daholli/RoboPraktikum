@@ -40,7 +40,7 @@ void returnString(volatile char* s) {
         UDR0 = s[i];
 
     }*/
-    char output = (char*) s;
+    char* output = (char*) s;
     uart_puts("\n\r");
     uart_puts(output);
     complete=0;
