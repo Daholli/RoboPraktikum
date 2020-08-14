@@ -24,6 +24,10 @@ void init();
 
 #define MAXLEN 10
 
+
+
+
+
 volatile char uart_string[MAXLEN +1] = "";
 volatile uint8_t uart_str_len = 0;
 volatile uint8_t complete;
@@ -41,9 +45,11 @@ ISR(USART_RX_vect) {
     c = UDR0;
     if(!complete) {
         if(c != '\n' && c != '\r' && uart_str_len < MAXLEN) {
+            setBit(PORTC, 5);
             uart_string[uart_str_len] = c;
             uart_str_len++;
         } else {
+            clearBit(PORTC, 5);
             uart_string[uart_str_len] = '\0';
             uart_str_len = 0;
             complete =1;
@@ -66,10 +72,16 @@ int main(void) {
     setBit(UCSR0B, RXC0);
     setBit(UCSR0B, TXC0);
 
+    setBit(DDRC, 5);
+    setBit(DDRC, 0);
 
     while(1) {
         if(complete){
+            setBit(PORTC, 0);
             returnString(uart_string);
+        } else {
+            clearBit(PORTC, 0);
+
         } 
 
     }
