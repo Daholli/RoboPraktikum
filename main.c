@@ -21,6 +21,62 @@ void init();
 #define toggleBit(reg, bit) (reg ^= (1 << bit))
 #define clearFlag(reg, bit) (reg |= (1<<bit))
 
+uint16_t start;
+uint16_t end;
+    
+typedef enum {UINT8, UINT16, UINT32, FLOAT} Datatype;
+
+void measureTime(Datatype type) {
+    switch(type) {
+        case UINT8:
+            volatile uint8_t z=0;
+            start = getMsTimer();
+            int i;
+            for(i=0; i < 1000; i++) {
+                z = ( z + 1 ) * 2;
+            }
+            end = getMsTimer();
+            uart_puts("\n\r uint8 runtime: ");
+            uart_puti((end-start));
+            return;
+        case UINT16:
+            volatile uint16_t z=0;
+            start = getMsTimer();
+            int i;
+            for(i=0; i < 1000; i++) {
+                z = ( z + 1 ) * 2;
+            }
+            end = getMsTimer();
+            uart_puts("\n\r uint8 runtime: ");
+            uart_puti((end-start));
+            return;
+        case UINT32:
+            volatile uint32_t z=0;
+            start = getMsTimer();
+            int i;
+            for(i=0; i < 1000; i++) {
+                z = ( z + 1 ) * 2;
+            }
+            end = getMsTimer();
+            uart_puts("\n\r uint8 runtime: ");
+            uart_puti((end-start));
+            return;
+        case FLOAT:
+            volatile float z=0;
+            start = getMsTimer();
+            int i;
+            for(i=0; i < 1000; i++) {
+                z = ( z + 1 ) * 2;
+            }
+            end = getMsTimer();
+            uart_puts("\n\r uint8 runtime: ");
+            uart_puti((end-start));
+            return; 
+        }
+
+    }
+}
+
     
 int main(void) {
 	// Initialisierung ausfuehren
@@ -30,34 +86,15 @@ int main(void) {
     //uint32_t nextEvent = getMsTimer()+delay;
     
     //int k = 0;
-    //uint16_t adc;
-    //int threshold = 250;
-	DDRB |= (1 << 1);	// Pin 5 an PORTD auf Ausgang stellen
-	TCCR1A = (1 << WGM11) | (1 << COM1A0) | (1 << COM1A1) ;	// Timer/Counter
-	TCCR1B = (1 << CS01);	// Takt von CK / 8 generieren
 
-    uint8_t counter=0;
-    uint8_t upperlimit = 255;
-    uint8_t lowerlimit = 0;
+    measureTime(UINT8);
+    measureTime(UINT16);
+    measureTime(UINT32);
+    measureTime(FLOAT);
+    
 
     while(1) {
-        //adc = getADCValue(k);
-        while(counter<upperlimit) {
-            _delay_us(5000);
-            setPWM(counter);
-            OCR1A = (uint16_t)counter*4;
-            counter++;
-            uart_puts("\n\r increment: ");
-            uart_puti(counter);
-        }
-        while(counter>lowerlimit) {
-            _delay_us(5000);
-            setPWM(counter);
-            OCR1A = (uint16_t)counter*4;
-            counter--;
-            uart_puts("\n\r decrement: ");
-            uart_puti(counter);
-        }
+        
 
     }
 }
