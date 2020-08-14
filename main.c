@@ -33,7 +33,7 @@ volatile uint8_t uart_str_len = 0;
 volatile uint8_t complete;
 
 
-void returnString(char* s) {
+void returnString(volatile char* s) {
     while( !(UDRE0 & ( 1 << UDRE0 )) );
     UDR0 = s;
     complete=0;
