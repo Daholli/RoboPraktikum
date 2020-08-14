@@ -42,7 +42,6 @@ int main(void) {
         while(counter<upperlimit) {
             setBit(PORTC, 0);
             clearBit(PORTC, 5);
-            _delay_us(5000);
             setServo(0,counter);
             counter++;
             uart_puts("\n\r increment: ");
@@ -51,7 +50,6 @@ int main(void) {
         while(counter>lowerlimit) {
             setBit(PORTC, 5);
             clearBit(PORTC, 0);
-            _delay_us(5000);
             setServo(0, counter);
             counter--;
             uart_puts("\n\r decrement: ");
