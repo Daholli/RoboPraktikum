@@ -21,45 +21,42 @@ void init();
 #define toggleBit(reg, bit) (reg ^= (1 << bit))
 #define clearFlag(reg, bit) (reg |= (1<<bit))
 
+void setRGB(uint8_t r, uint8_t g, uint8_t b) {
+	setPWM(r);
+	OCR1A(g*4);
+	ORC1B(b*4);
+}	
     
 int main(void) {
 	// Initialisierung ausfuehren
 
 	init();
-    //const uint16_t delay = 1000;
-    //uint32_t nextEvent = getMsTimer()+delay;
-    
-    //int k = 0;
-    //uint16_t adc;
-    //int threshold = 250;
-	DDRB |= (1 << 1);	// Pin 5 an PORTD auf Ausgang stellen
-	TCCR1A = (1 << WGM11) | (1 << COM1A0) | (1 << COM1A1) ;	// Timer/Counter
-	TCCR1B = (1 << CS01);	// Takt von CK / 8 generieren
 
-    uint8_t counter=0;
-    uint8_t upperlimit = 255;
-    uint8_t lowerlimit = 0;
+	setbit(DDRB, 1);
+	setbit(DDRB, 2);
 
-    while(1) {
-        //adc = getADCValue(k);
-        while(counter<upperlimit) {
-            _delay_us(5000);
-            setPWM(counter);
-            OCR1A = (uint16_t)counter*4;
-            counter++;
-            uart_puts("\n\r increment: ");
-            uart_puti(counter);
-        }
-        while(counter>lowerlimit) {
-            _delay_us(5000);
-            setPWM(counter);
-            OCR1A = (uint16_t)counter*4;
-            counter--;
-            uart_puts("\n\r decrement: ");
-            uart_puti(counter);
-        }
+	TCCR1A = (1 << WGM11) | (1 << COM1A0) | (1 << COM1A1);
+	TCCR1B = (1 << CS01);
 
-    }
+	
+    	uint8_t counter=0;
+	uint8_t upperlimit=255;
+
+   	while(1) {
+		counter++;
+		_delay_us(1000);
+		if(counter < 75) {
+			setRGB(255,0,0);
+		} else if(counter < 150) {
+			setRGB(0,255,0);
+		} else if(counter < 225) {
+			setRGB(0,0,255);
+		} else if(counter < 250) {
+			setRGB(255,255,255);
+		} else {
+			counter = 0;
+		}
+    	}
 }
 
 
