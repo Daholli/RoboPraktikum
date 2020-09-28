@@ -25,7 +25,7 @@ void ADCInit(uint8_t kanal) {
 	// alternativ kann auch eine externe Spannungreferenz verwenden werden 
 	// 
 	// (siehe Datenblatt)
-	ADMUX = (1 << REFS0) | kanal;	// den richtigen Kanal auswaehlen
+	ADMUX = (1 << REFS0) | (1<<REFS1) | kanal;	// den richtigen Kanal auswaehlen
 
 
 	// nach Aktivieren des ADC wird ein "Dummy-Readout" empfohlen, man
