@@ -22,6 +22,7 @@ void timerInit(void) {
 SIGNAL(TIMER2_COMPA_vect) {
 //      hier koennen weitere Befehle ergaenzt werden, die jede Millisekunde ausgefuehrt werden sollen
 	ms_timer++;		// Die "Systemzeit" inkrementieren
+	numberlogic();
 }
 
 uint32_t getMsTimer() {

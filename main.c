@@ -16,64 +16,14 @@
 
 void init();
 
+volatile uint8_t temperatur;
 
 #define setBit(reg, bit) (reg |= (1 << bit))
 #define clearBit(reg, bit) (reg &= ~(1 << bit))
 #define toggleBit(reg, bit) (reg ^= (1 << bit))
 #define clearFlag(reg, bit) (reg |= (1<<bit))
 
-void reverse(char* str, int len) {
-    int i = 0, j = len - 1, temp;
-    while (i < j) {
-        temp = str[i];
-        str[i] = str[j];
-        str[j] = temp;
-        i++;
-        j--;
-    }
-}
 
-int intToStr(int x, char str[], int d) { 
-    int i = 0; 
-    while (x) { 
-        str[i++] = (x % 10) + '0'; 
-        x = x / 10; 
-    } 
-  
-    // If number of digits required is more, then 
-    // add 0s at the beginning 
-    while (i < d) 
-        str[i++] = '0'; 
-  
-    reverse(str, i); 
-    str[i] = '\0'; 
-    return i; 
-} 
-
-void ftoa(float n, char* res, int afterpoint) { 
-    // Extract integer part 
-    int ipart = (int)n; 
-  
-    // Extract floating part 
-    float fpart = n - (float)ipart; 
-  
-    // convert integer part to string 
-    int i = intToStr(ipart, res, 0); 
-  
-    // check for display option after point 
-    if (afterpoint != 0) { 
-        res[i] = '.'; // add dot 
-  
-        // Get the value of fraction part upto given no. 
-        // of points after dot. The third parameter  
-        // is needed to handle cases like 233.007 
-        fpart = fpart * pow(10, afterpoint); 
-  
-        intToStr((int)fpart, res + i + 1, afterpoint); 
-    } 
-} 
-
-//------------------ continue here
 void setDisplay(uint8_t num) {
 	switch(num){
 		case 0:
@@ -201,8 +151,31 @@ void setDisplay(uint8_t num) {
 	}
 }
 
+void firstNumber(uint8_t num) {
+	clearBit(PORTB, 2);
+	setBit(PORTB, 1);
+	setDisplay(num);
+}
+void secondNumber(uint8_t num) {
+	clearBit(PORTB, 1);
+	setBit(PORTB, 2);
+	setDisplay(num);
+	clearBit(PORTD, 3);
+}
+
+void numberlogic() {
+	if(floor(temperatur/10) == 0) {
+		secondNumber(temperatur);
+	} else {
+		firstNumber(floor(temperatur/10));
+		secondNumber(temperatur-(floor(temperatur/10)*10));
+	}
+
+
+}
 
 #define SIZE_OF_BUFFER 10
+
 
 int main(void) {
 	// Initialisierung ausfuehren
@@ -225,6 +198,7 @@ int main(void) {
 	setBit(DDRB, 1);
 	setBit(DDRB, 2);
 
+
 	uint16_t circularBuffer[10];
 	uint8_t bufferLength =0;
 
@@ -233,18 +207,6 @@ int main(void) {
 	uint32_t sum = 0;
 	
    	while(1) {
-		setDisplay(6);
-		
-		setBit(PORTB, 1);
-		clearBit(PORTB, 2);
-	
-		/*setDisplay(3);
-	
-		clearBit(PORTB, 1);
-		setBit(PORTB, 2);
-	
-		//setDisplay(3);
-*/
 		adc = getADCValue(0);
 
 		uint16_t tmp = circularBuffer[writeIndex];
@@ -263,12 +225,9 @@ int main(void) {
 			writeIndex =0;
 		}
 
-
-		char temperatur[10];
-		ftoa((sum/bufferLength)*0.1, temperatur, 1);		
-		uart_puts("\r\n");
-		uart_puts(temperatur);
-		_delay_ms(500);
+		temperatur = round((sum/bufferLength)*0.1);
+		uart_puts("\n\r");	
+		uart_puti(temperatur);
     	}
 }
 
