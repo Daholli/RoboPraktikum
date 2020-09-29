@@ -122,8 +122,6 @@ float maxof(float R, float G, float B) {
 		return B;
 	} else if (G > R && G > B) {
 		return G;
-	} else {
-		return R;
 	}
 }
 
@@ -134,22 +132,31 @@ float minof(float R, float G, float B) {
 		return B;
 	} else if (G < R && G < B) {
 		return G;
-	} else {
-		return R;
 	}
 }
 
-float normRGB[3];
-float * normalize(uint16_t R, uint16_t G, uint16_t B, uint16_t min, uint16_t max) {
-	if(max == 0) {
+volatile float maxRGB[3];
+volatile float normRGB[3];
+float * normalize(uint16_t R, uint16_t G, uint16_t B, uint16_t min) {
+	if(R > maxRGB[0]) {
+		maxRGB[0] = R;
+	}
+	if(G > maxRGB[1]) {
+		maxRGB[1] = G;
+	}
+	if(B > maxRGB[2]) {
+		maxRGB[2] = B;
+	}
+
+	if(maxRGB[0] == 0 && maxRGB[1] == 0 && maxRGB[2] == 0) {
 		normRGB[0] = 0;
 		normRGB[1] = 0;
 		normRGB[2] = 0;
 		return normRGB;
 	}	
-	normRGB[0] = (R-min)/(max-min);
-	normRGB[1] = (G-min)/(max-min);
-	normRGB[2] = (B-min)/(max-min);
+	normRGB[0] = (R-min)/(maxRGB[0]-min);
+	normRGB[1] = (G-min)/(maxRGB[1]-min);
+	normRGB[2] = (B-min)/(maxRGB[2]-min);
 
 	return normRGB;
 }
@@ -168,17 +175,17 @@ float * RGBtoHSV(float R, float G, float B) {
 			HSV[2] = max;
 		}
 	} else if ( max == R ) {
-		HSV[0] = 60*(0+((G-B)/(max-min)));
+		HSV[0] = round(60*(0+((G-B)/(max-min))));
 		HSV[1] = (max-min)/max;
 		HSV[2] = max;
 		return HSV;
 	} else if ( max == G ) {
-		HSV[0] = 60*(2+((B-R)/(max-min)));
+		HSV[0] = round(60*(2+((B-R)/(max-min))));
 		HSV[1] = (max-min)/max;
 		HSV[2] = max;
 		return HSV;
 	} else if ( max == B ) {
-		HSV[0] = 60*(4+((R-G)/(max-min)));
+		HSV[0] = round(60*(4+((R-G)/(max-min))));
 		HSV[1] = (max-min)/max;
 		HSV[2] = max;
 		return HSV;
@@ -197,7 +204,7 @@ int main(void) {
 	//uint16_t adc;	
 	uint8_t c = 0;
 	uint16_t fremdlicht;
-	uint16_t max;
+	uint16_t W;
 	uint16_t R;
 	uint16_t G;
 	uint16_t B;
@@ -214,7 +221,7 @@ int main(void) {
 		} else if(c == 1) {
 			setRGB(1,1,1);
 			_delay_ms(500);				
-			max = getADCValue(0);
+			W = getADCValue(0);
 			c++;
 		} else if(c == 2) {
 			setRGB(1,0,0);
@@ -241,11 +248,9 @@ int main(void) {
 		uart_puti(B);
 		uart_puts(" ");
 		uart_puti(fremdlicht);
-		uart_puts(" ");
-		uart_puti(max);
 		
 
-		RGB = normalize(R,B,G,fremdlicht,max);
+		RGB = normalize(R,B,G,fremdlicht);
 		HSV = RGBtoHSV(*(RGB +0), *(RGB +1), *(RGB +2));
 		
 		char R[10];
