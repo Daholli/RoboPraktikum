@@ -28,8 +28,8 @@ volatile uint16_t target1;
 volatile uint16_t target2;
 
 
-volatile uint16_t counter1 = 1999;
-volatile uint16_t counter2 = 1001;
+volatile uint16_t counter1 = 1100; // 0° Kleiner Arm
+volatile uint16_t counter2 = 1999; // 0° Großer Arm
 
 ISR(TIMER1_OVF_vect) {
     	if(counter1<target1) {
@@ -69,8 +69,8 @@ int main(void) {
 
  	setBit(DDRC, 0);
  	setBit(DDRC, 5);
-	target1 = 1001;
-	target2 = 1999;
+	target1 = 1100;
+	target2 = 1100; // 90° Großer Arm
 
 	
    	while(1) {
