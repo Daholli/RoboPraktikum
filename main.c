@@ -77,38 +77,38 @@ void ftoa(float n, char* res, int afterpoint) {
 void setRGB(uint8_t R, uint8_t G, uint8_t B) {
 	switch(R) {
 		case 0:
-			clearBit(PORTB, 3);
+			clearBit(PORTC, 3);
 			break;
 		case 1:
-			setBit(PORTB, 3);
+			setBit(PORTC, 3);
 			break;
 		default:
-			clearBit(PORTB, 3);
+			clearBit(PORTC, 3);
 			break;
 
 	}
 	switch(G) {
 		case 0:
-			clearBit(PORTB, 4);
+			clearBit(PORTC, 4);
 			break;
 		case 1:
-			setBit(PORTB, 4);
+			setBit(PORTC, 4);
 			break;
 		default:
-			clearBit(PORTB, 4);
+			clearBit(PORTC, 4);
 			break;
 
 
 	}
 	switch(B) {
 		case 0:
-			clearBit(PORTB, 5);
+			clearBit(PORTC, 5);
 			break;
 		case 1:
-			setBit(PORTB, 5);
+			setBit(PORTC, 5);
 			break;
 		default:
-			clearBit(PORTB, 5);
+			clearBit(PORTC, 5);
 			break;
 	}
 
@@ -193,14 +193,65 @@ float * RGBtoHSV(float R, float G, float B) {
 	
 
 }
-	
+
+
+void returnColor(uint16_t H, float S, float V) {
+	if(V < 0.30) {
+		uart_puts("\n\r");
+		uart_puts("Schwarz");
+		return;
+	}
+	if(S < 0.30) {
+		uart_puts("\n\r");
+		uart_puts("Weiss");
+		return;
+	}
+	if((H >350 && H <=360) || ( H >= 0 && H < 10)) {
+		uart_puts("\n\r");
+		uart_puts("Rot");
+		return;
+	}
+	if(H > 10 && H < 30) {
+		uart_puts("\n\r");
+		uart_puts("Magenta");
+		return;
+	}	
+	if(H > 120 && H < 190) {
+		if(V < 0.65) {
+			uart_puts("\n\r");
+			uart_puts("Blau");
+			return;
+		} else {
+			uart_puts("\n\r");
+			uart_puts("Cyan");
+			return;
+		}
+	}
+	if(H > 200 && H < 250) {
+		uart_puts("\n\r");
+		uart_puts("Gruen");
+		return;
+	}
+	if(H > 290 && H < 310) {	
+		uart_puts("\n\r");
+		uart_puts("Gelb");
+		return;
+	} else {
+		uart_puts("\n\r");
+		uart_puts("No known Color");
+		return;
+	}
+
+}
+
+
 
 
 int main(void) {
 	// Initialisierung ausfuehren
 
 	init();
-	DDRB |= (1<<3) | (1 <<4) | (1 << 5);
+	DDRC |= (1<<3) | (1 <<4) | (1 << 5);
 	//uint16_t adc;	
 	uint8_t c = 0;
 	uint16_t fremdlicht;
@@ -240,6 +291,7 @@ int main(void) {
 			c=0;
 		}
 
+		/*
 		uart_puts("\r\n");
 		uart_puti(R);
 		uart_puts(" ");
@@ -248,11 +300,15 @@ int main(void) {
 		uart_puti(B);
 		uart_puts(" ");
 		uart_puti(fremdlicht);
-		
+		*/
 
 		RGB = normalize(R,B,G,fremdlicht);
 		HSV = RGBtoHSV(*(RGB +0), *(RGB +1), *(RGB +2));
 		
+		if(HSV[0] < 0 ) {
+			HSV[0] += 360;
+		}
+		/*
 		char R[10];
 		char G[10];
 		char B[10];
@@ -266,8 +322,9 @@ int main(void) {
 		uart_puts(G);
 		uart_puts(" B: ");
 		uart_puts(B);
- 
-
+		*/
+ 		
+		
 		char H[10];
 		char S[10];
 		char V[10];
@@ -281,6 +338,12 @@ int main(void) {
 		uart_puts(S);
 		uart_puts(" V: ");
 		uart_puts(V);
+		
+
+		returnColor(HSV[0], HSV[1], HSV[2]);		
+		
+		
+		
     	}
 }
 
