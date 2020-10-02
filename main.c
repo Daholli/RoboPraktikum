@@ -46,6 +46,7 @@ void measureTime(Datatype type, int iterations) {
             int i;
             for(i=0; i < iterations; i++) {
                 z = ( z + 1 ) * 2;
+                asm volatile ("nop");
             }
             end = getMsTimer()-looplength;
             uart_puts("\n\r uint8 runtime: ");
@@ -58,6 +59,7 @@ void measureTime(Datatype type, int iterations) {
             int i;
             for(i=0; i < iterations; i++) {
                 z = ( z + 1 ) * 2;
+                asm volatile ("nop");
             }
             end = getMsTimer()-looplength;
             uart_puts("\n\r uint16 runtime: ");
@@ -70,6 +72,7 @@ void measureTime(Datatype type, int iterations) {
             int i;
             for(i=0; i < iterations; i++) {
                 z = ( z + 1 ) * 2;
+                asm volatile ("nop");
             }
             end = getMsTimer()-looplength;
             uart_puts("\n\r uint32 runtime: ");
@@ -82,6 +85,7 @@ void measureTime(Datatype type, int iterations) {
             int i;
             for(i=0; i < iterations; i++) {
                 z = ( z + 1 ) * 2;
+                asm volatile ("nop");
             }
             end = getMsTimer()-looplength;
             uart_puts("\n\r float runtime: ");
