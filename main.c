@@ -55,8 +55,8 @@ void HSVtoRGB(uint16_t H, double S, double V){
 
 void setRGB(double r, double g, double b) {
 	setPWM(r);
-	OCR1A = ((g*4*68)/300);
-	OCR1B = ((b*4*68)/300);
+	OCR1A = ((g*4*68)/150);
+	OCR1B = ((b*4*68)/150);
 }	
     
 int main(void) {
