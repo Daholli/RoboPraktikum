@@ -165,7 +165,7 @@ void secondNumber(uint8_t num) {
 
 void numberlogic() {
 	if(floor(temperatur/10) == 0) {
-		secondNumber(temperatur);
+		secondNumber(floor(temperatur/10)*10);
 	} else {
 		firstNumber(floor(temperatur/10));
 		secondNumber(temperatur-(floor(temperatur/10)*10));
@@ -225,7 +225,7 @@ int main(void) {
 			writeIndex =0;
 		}
 
-		temperatur = round((sum/bufferLength)*0.1);
+		temperatur = round((sum/bufferLength)*1.075*0.1);
 		uart_puts("\n\r");	
 		uart_puti(temperatur);
     	}
