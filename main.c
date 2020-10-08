@@ -165,7 +165,7 @@ void secondNumber(uint8_t num) {
 
 void numberlogic() {
 	if(floor(temperatur/10) == 0) {
-		secondNumber(floor(temperatur/10)*10);
+		secondNumber(temperatur);
 	} else {
 		firstNumber(floor(temperatur/10));
 		secondNumber(temperatur-(floor(temperatur/10)*10));
@@ -236,7 +236,7 @@ int main(void) {
 void init() {
 	uartInit();		// serielle Ausgabe an PC
 	ADCInit(0);		// Analoge Werte einlesen
-	PWMInit();		// Pulsweite auf D6 ausgeben 
+	//PWMInit();		// Pulsweite auf D6 ausgeben 
 	timerInit();		// "Systemzeit" initialisieren
 	// servoInit(); // Servoansteuerung initialisieren
 }
