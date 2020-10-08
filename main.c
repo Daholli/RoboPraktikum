@@ -24,12 +24,16 @@ void init();
 #define clearFlag(reg, bit) (reg |= (1<<bit))
 
 
+#define L1 12
+#define L2 10
+
+
 volatile uint16_t target1;
 volatile uint16_t target2;
 
 
-volatile uint16_t counter1 = 1100; // 0° Kleiner Arm
-volatile uint16_t counter2 = 1999; // 0° Großer Arm
+volatile uint16_t counter1 = (SERVO_MIN+SERVO_MAX)/2; // 0° Kleiner Arm
+volatile uint16_t counter2 = (SERVO_MIN+SERVO_MAX)/2; // 0° Großer Arm
 
 ISR(TIMER1_OVF_vect) {
     	if(counter1<target1) {
@@ -47,15 +51,41 @@ ISR(TIMER1_OVF_vect) {
 
 void setServoAngle(uint8_t nr, uint16_t alpha) {
 	if(nr == 0) {
-		OCR1A = alpha;
+		target1 = round((alpha + 195)/0.2);
+		OCR1A = counter1;
 	} else if (nr == 1) {
-		OCR1B = alpha;
+		target2 = round((alpha + 110)/0.1);
+		OCR1B = counter2;
 	} else { 
 		return;
 	}
 }
 
-void calibrate() {
+float* xytoRadial(uint8_t x, uint8_t y) {
+	float phir = [2];
+	phir[0] = atan2(x,y);
+	phir[1] = sqrt((x*x) + (y*y));
+	return phir;
+}
+
+uint16_t* thetas(float phi, float r, uint16_t l1, uint16_t l2) {
+	uint16_t thetas = [2];
+	uint16_t alpha = acos(((r*r) + (l1*l1)  - (l2*l2))/(2*r*l1));
+	uint16_t beta = acos(((l1*l1)+(l2*l2) - (r*r))/(2*l1*l2));
+	thetas[0] = round(phi - alpha);
+	thetas[1] = round(180 - beta);
+	return thetas;
+}
+
+void gotoRadial(float r, float phi) {	
+	angles = thetas(phi, r, L1, L2);
+	
+
+}
+
+void resetServo {
+	target1 = (SERVO_MIN+SERVO_MAX)/2; 
+	target2 = (SERVO_MIN+SERVO_MAX)/2; 
 
 }
 
@@ -69,8 +99,6 @@ int main(void) {
 
  	setBit(DDRC, 0);
  	setBit(DDRC, 5);
-	target1 = 1100;
-	target2 = 1100; // 90° Großer Arm
 
 	
    	while(1) {
