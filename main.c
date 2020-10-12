@@ -26,6 +26,7 @@ void init();
 
 #define L1 12
 #define L2 10
+#define steps 16
 
 volatile float mod = 1;
 
@@ -37,7 +38,7 @@ volatile uint16_t counter1 = (SERVO_MIN + SERVO_MAX)/2; // Großer Arm
 volatile uint16_t counter2 = (SERVO_MIN + SERVO_MAX)/2; // kleiner Arm
 
 ISR(TIMER1_OVF_vect) {
-    	if(abs(counter1 - target1) > 5) {
+    	if(abs(counter1 - target1) > 10) {
 		if (counter1 < target1) {
         		counter1 += 3;
     		} else if (counter1 > target1) {
@@ -50,7 +51,7 @@ ISR(TIMER1_OVF_vect) {
 			counter1 -= 1;
 		}
 	}
-	if(abs(counter2 - target2) > 5) {
+	if(abs(counter2 - target2) > 10) {
 		if (counter2 < target2) {
         		counter2 += round(3 * mod);
     		} else if (counter2 > target2) {
@@ -86,12 +87,12 @@ uint16_t theta[2];
 uint16_t* thetas(float phi, float r, uint16_t l1, uint16_t l2) {
 	uint16_t alpha = acos(((r*r) + (l1*l1)  - (l2*l2))/(2*r*l1))*180/M_PI;
 	uint16_t beta = acos(((l1*l1)+ (l2*l2) - (r*r))/(2*l1*l2))*180/M_PI;
-	uart_puts("\n\r a, b, phi: ");
+	/*uart_puts("\n\r a, b, phi: ");
 	uart_puti(alpha);
 	uart_puts(" ");
 	uart_puti(beta);
 	uart_puts(" ");
-	uart_puti(round(phi));
+	uart_puti(round(phi));*/
 	theta[0] = round(phi + alpha);
 	theta[1] = round(180 - beta);
 	return theta;
@@ -99,10 +100,10 @@ uint16_t* thetas(float phi, float r, uint16_t l1, uint16_t l2) {
 
 void gotoRadial(float phi, float r) {	
 	uint16_t* angles = thetas(phi, r, L1, L2);
-	uart_puts("\n\r Angles: ");
+	/*uart_puts("\n\r Angles: ");
 	uart_puti(angles[0]);
 	uart_puts(" ");
-	uart_puti(angles[1]);
+	uart_puti(angles[1]);*/
 	setServoAngle(0,angles[0]);
 	setServoAngle(1,angles[1]);
 	scale();
@@ -113,11 +114,27 @@ void scale() {
 	float modifier2 = abs(counter2 - target2);
 
 	mod = modifier2/modifier1;
+	if(mod > 5){
+		mod = 5;
+	}
+			
 }
 
 void resetServo() {
 	target1 = (SERVO_MIN+SERVO_MAX)/2; 
 	target2 = (SERVO_MIN+SERVO_MAX)/2; 
+}
+
+volatile float circlex[steps];
+volatile float circley[steps];
+void drawCircle(float x, float y, float r) {
+	int i;
+	if(steps == 0) return;
+	float stepsize = 360/steps;
+	for(i = 0; i < steps; i++){
+		circlex[i] = x + r * cos(stepsize*i*M_PI/180);
+		circley[i] = y + r * sin(stepsize*i*M_PI/180);
+	}
 }
 
 
@@ -129,10 +146,12 @@ int main(void) {
 	setBit(TIMSK1, TOIE1);
 
 	uint16_t arrived = 0;
-
+	uint8_t lock =0;
 	//gotoXY(-5, 15);
 	
 	//gotoRadial(90,20);
+
+	drawCircle(0,17, 4);
    	while(1) {
 		
 		uart_puts("\n\r Increments: ");
@@ -151,18 +170,30 @@ int main(void) {
 			OCR1B = counter2;
 		}				
 		
-		if (counter1 == target1 && counter2 == target2) {
+		if (counter1 == target1 && counter2 == target2 && lock) {
 			arrived +=1;
+			lock = 0;
+		} else {
+			/*
+			if (arrived % 4 == 0) {
+				gotoXY(-2,19);
+			} else if (arrived % 4 == 1) {
+				gotoXY(-2,15);
+			} else if (arrived % 4 == 2) {
+				gotoXY(2,15);
+			} else if (arrived % 4 == 3) {
+				gotoXY(2,19);
+			}
+			*/
+			if(!lock){
+				uint16_t currentstep = arrived % steps;
+				uart_puts("\n\r currentstep: ");
+				uart_puti(currentstep);	
+				gotoXY(circlex[currentstep], circley[currentstep]);
+				lock = 1;
+			}
 		}
-		if (arrived % 4 == 0) {
-			gotoXY(-2,19);
-		} else if (arrived % 4 == 1) {
-			gotoXY(-2,15);
-		} else if (arrived % 4 == 2) {
-			gotoXY(2,15);
-		} else if (arrived % 4 == 3) {
-			gotoXY(2,19);
-		}
+		
 	}
 }
 
