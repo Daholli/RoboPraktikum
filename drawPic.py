@@ -20,6 +20,13 @@ class ScaraRobo():
         self.ser.parity = serial.PARITY_NONE
         self.ser.stopbits = serial.STOPBITS_ONE
 
+        try:
+            self.ser.open()
+        except Exception, e:
+            print "error open serial port: " + str(e)
+            exit()
+        self.ser.write(chr(255));
+
     def setX(self, line):
         self.ser.write(data[line][0])
 
