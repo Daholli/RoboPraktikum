@@ -30,7 +30,7 @@ void init();
 volatile float mod = 1;
 
 volatile uint16_t target1 = (SERVO_MIN + SERVO_MAX)/2;
-volatile uint16_t target2 = (SERVO_MIN + SERVO_MAX)/2;
+volatile uint16_t target2 = 1100;
 
 
 volatile uint16_t counter1 = (SERVO_MIN + SERVO_MAX)/2; // Großer Arm
@@ -69,7 +69,7 @@ void setServoAngle(uint8_t nr, uint16_t alpha) {
 	if(nr == 0) {
 		target1 = (5*alpha) + 1000;
 	} else if (nr == 1) {
-		target2 = (10*alpha) + 1000;
+		target2 = (5*alpha) + 1000;
 	} else { 
 		return;
 	}
@@ -93,7 +93,7 @@ uint16_t* thetas(float phi, float r, uint16_t l1, uint16_t l2) {
 	uart_puts(" ");
 	uart_puti(round(phi));
 	theta[0] = round(phi + alpha);
-	theta[1] = round(180 - beta);
+	theta[1] = round(beta);
 	return theta;
 }
 
@@ -154,6 +154,7 @@ int main(void) {
 		if (counter1 == target1 && counter2 == target2) {
 			arrived +=1;
 		}
+		/*	
 		if (arrived % 4 == 0) {
 			gotoXY(-2,19);
 		} else if (arrived % 4 == 1) {
@@ -163,6 +164,7 @@ int main(void) {
 		} else if (arrived % 4 == 3) {
 			gotoXY(2,19);
 		}
+		*/
 	}
 }
 
