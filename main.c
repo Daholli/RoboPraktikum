@@ -28,55 +28,81 @@ void init();
 #define L2 10
 
 
-volatile uint16_t target1 = (SERVO_MIN+SERVO_MAX)/2;
-volatile uint16_t target2 = (SERVO_MIN+SERVO_MAX)/2;
+volatile uint16_t target1 = (SERVO_MIN + SERVO_MAX)/2;
+volatile uint16_t target2 = 1900;
 
 
-volatile uint16_t counter1 = (SERVO_MIN+SERVO_MAX)/2; // 0° Kleiner Arm
-volatile uint16_t counter2 = (SERVO_MIN+SERVO_MAX)/2; // 0° Großer Arm
+volatile uint16_t counter1 = (SERVO_MIN + SERVO_MAX)/2; // Großer Arm
+volatile uint16_t counter2 = (SERVO_MIN + SERVO_MAX)/2; // kleiner Arm
 
 ISR(TIMER1_OVF_vect) {
-    	if(counter1 < target1) {
-        	counter1++;
-    	} else if (counter1 > target1) {
-		counter1--;
+    	if(abs(counter1 - target1) > 5) {
+		if (counter1 < target1) {
+        		counter1 += 2;
+    		} else if (counter1 > target1) {
+			counter1 -= 2;
+		}
+	} else {
+		 if (counter1 < target1) {
+        		counter1 += 1;
+    		} else if (counter1 > target1) {
+			counter1 -= 1;
+		}
 	}
-
-    	if(counter2 < target2) {
-        	counter2++;
-	} else if (counter2 > target2) {
-		counter2--;
+	if(abs(counter2 - target2) > 5) {
+		if (counter2 < target2) {
+        		counter2 += 2;
+    		} else if (counter2 > target2) {
+			counter2 -= 2;
+		}
+	} else {
+		 if (counter2 < target2) {
+        		counter2 += 1;
+    		} else if (counter2 > target2) {
+			counter2 -= 1;
+		}
 	}
 }
 
 void setServoAngle(uint8_t nr, uint16_t alpha) {
 	if(nr == 0) {
-		target1 = round((alpha + 195)*5);
+		target1 = (5*alpha) + 1000;
 	} else if (nr == 1) {
-		target2 = round((alpha + 110)*10);
+		target2 = (5*alpha) + 1000;
 	} else { 
 		return;
 	}
 }
 
 float phir[2];
-void gotoXY(uint8_t x, uint8_t y) {
-	phir[0] = atan2(x,y);
-	phir[1] = sqrt((x*x) + (y*y));
+void gotoXY(float x, float y) {
+	phir[0] = atan2(y,x)*180/M_PI;
+	phir[1] = sqrtf(x*x+y*y);
 	gotoRadial(phir[0], phir[1]);
 }
 
 uint16_t theta[2];
 uint16_t* thetas(float phi, float r, uint16_t l1, uint16_t l2) {
-	uint16_t alpha = acos(((r*r) + (l1*l1)  - (l2*l2))/(2*r*l1));
-	uint16_t beta = acos(((l1*l1)+(l2*l2) - (r*r))/(2*l1*l2));
-	theta[0] = round(phi - alpha);
-	theta[1] = round(180 + beta);
+	uint16_t alpha = acos(((r*r) + (l1*l1)  - (l2*l2))/(2*r*l1))*180/M_PI;
+	uint16_t beta = acos(((l1*l1)+ (l2*l2) - (r*r))/(2*l1*l2))*180/M_PI;
+	uart_puts("\n\r a, b, phi: ");
+	uart_puti(alpha);
+	uart_puts(" ");
+	uart_puti(beta);
+	uart_puts(" ");
+	uint16_t rphi = round(phi);
+	uart_puti(rphi);
+	theta[0] = round(phi + alpha);
+	theta[1] = round(beta);
 	return theta;
 }
 
 void gotoRadial(float phi, float r) {	
 	uint16_t* angles = thetas(phi, r, L1, L2);
+	uart_puts("\n\r Angles: ");
+	uart_puti(angles[0]);
+	uart_puts(" ");
+	uart_puti(angles[1]);
 	setServoAngle(0,angles[0]);
 	setServoAngle(1,angles[1]);
 }
@@ -94,13 +120,13 @@ int main(void) {
 
 	setBit(TIMSK1, TOIE1);
 
- 	setBit(DDRC, 0);
- 	setBit(DDRC, 5);
+	uint16_t arrived = 0;
 
-
-	gotoXY(3,4);
+	//gotoXY(-5, 15);
 	
+	//gotoRadial(90,20);
    	while(1) {
+		
 		uart_puts("\n\r Increments: ");
 		uart_puti(counter1);
 		uart_puts(" ");
@@ -109,7 +135,6 @@ int main(void) {
 		uart_puti(target1);
 		uart_puts(" ");
 		uart_puti(target2);	
-		
 		if (counter1 != target1) {
 			OCR1A = counter1;
 		}
@@ -117,6 +142,21 @@ int main(void) {
 		if (counter2 != target2) {
 			OCR1B = counter2;
 		}				
+		
+		if (counter1 == target1 && counter2 == target2) {
+			arrived +=1;
+		}
+		
+		if (arrived % 4 == 0) {
+			gotoXY(-5,10);
+		} else if (arrived % 4 == 1) {
+			gotoXY(-5,15);
+		} else if (arrived % 4 == 2) {
+			gotoXY(-1,15);
+		} else if (arrived % 4 == 3) {
+			gotoXY(-1,10);
+		}
+		
 	}
 }
 
