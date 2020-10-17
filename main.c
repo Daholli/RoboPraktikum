@@ -66,6 +66,34 @@ ISR(TIMER1_OVF_vect) {
 	}
 }
 
+
+volatile int16_t coordinatenr = 0;
+volatile float* xPic = { NULL };
+volatile float* yPic = { NULL };
+
+volatile int bint=0;
+volatile char buffer[100];
+volatile char cordbuffer[100];
+
+ISR(USART_RX_vect) {
+	buffer[bint] = UDR0;
+	if(buffer[bint] == '\r') {
+		buffer[bint] = '\0';
+		if(buffer[0] == 'x') {
+			memmove(buffer, buffer+1, strlen(buffer))
+			xPic[coordinatenr] = atof(buffer);
+			if(!yPic[coordinatenr] == NULL) coordinatenr++;			
+		} else if (buffer[0] == 'y') {
+			memmove(buffer, buffer+1, strlen(buffer))
+			yPic[coordinatenr] = atof(buffer);
+			if(!xPic[coordinatenr] == NULL) coordinatenr++;			
+		} 
+		bint = 0;
+	} else {
+		i++;
+	}
+}
+
 void setServoAngle(uint8_t nr, uint16_t alpha) {
 	if(nr == 0) {
 		target1 = (5*alpha) + 1000;
@@ -137,7 +165,6 @@ void drawCircle(float x, float y, float r) {
 	}
 }
 
-
 int main(void) {
 	// Initialisierung ausfuehren
 
@@ -145,13 +172,17 @@ int main(void) {
 
 	setBit(TIMSK1, TOIE1);
 
+	setBit(UCSR0B, RXCIE0);
+    setBit(UCSR0B, RXC0);
+    setBit(UCSR0B, TXC0);
+
 	uint16_t arrived = 0;
 	uint8_t lock =0;
 	//gotoXY(-5, 15);
 	
 	//gotoRadial(90,20);
 
-	drawCircle(0,17, 4);
+	//drawCircle(0,17, 4);
    	while(1) {
 		
 		uart_puts("\n\r Increments: ");
@@ -185,11 +216,16 @@ int main(void) {
 				gotoXY(2,19);
 			}
 			*/
-			if(!lock){
+			/*if(!lock){
 				uint16_t currentstep = arrived % steps;
 				uart_puts("\n\r currentstep: ");
 				uart_puti(currentstep);	
 				gotoXY(circlex[currentstep], circley[currentstep]);
+				lock = 1;
+			}*/
+
+			if(!lock){
+				gotoXY(xPic[currentstep], yPic[currentstep];)
 				lock = 1;
 			}
 		}
