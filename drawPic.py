@@ -21,7 +21,7 @@ data[:,0] = np.char.add(data[:,0], rcarriage)
 data[:,1] = np.char.add(y,data[:,1])
 data[:,1] = np.char.add(data[:,1], rcarriage)
 
-print(data)
+#print(data)
 
 class ScaraRobo():
     def __init__(self):
@@ -37,7 +37,7 @@ class ScaraRobo():
         except Exception as e:
             print("error open serial port: " + str(e))
             exit()
-        self.ser.write(chr(255))
+        self.ser.write(chr(255).encode())
 
     def setX(self, line):
         self.ser.write(data[line][0].encode())

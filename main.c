@@ -90,7 +90,7 @@ ISR(USART_RX_vect) {
 		} 
 		bint = 0;
 	} else {
-		i++;
+		bint++;
 	}
 }
 
