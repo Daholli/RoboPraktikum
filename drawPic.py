@@ -1,4 +1,5 @@
-import serial, time
+import serial
+from time import sleep
 import numpy as np
 
 with open("./datapoints.txt", 'r') as f:
