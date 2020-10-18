@@ -48,7 +48,9 @@ class ScaraRobo():
 
     def draw(self, data):
         for i in range(data.shape[0]):
+            sleep(0.01)
             self.setX(i)
+            sleep(0.01)
             self.setY(i)
 
 
