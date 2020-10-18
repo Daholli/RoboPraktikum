@@ -68,8 +68,8 @@ ISR(TIMER1_OVF_vect) {
 
 
 volatile int16_t coordinatenr = 0;
-volatile float* xPic = { NULL };
-volatile float* yPic = { NULL };
+volatile float* xPic = { 0 };
+volatile float* yPic = { 0 };
 
 volatile int bint=0;
 volatile char buffer[100];
@@ -80,13 +80,17 @@ ISR(USART_RX_vect) {
 	if(buffer[bint] == '\r') {
 		buffer[bint] = '\0';
 		if(buffer[0] == 'x') {
-			memmove(buffer, buffer+1, strlen(buffer))
+			memmove(buffer, buffer+1, strlen(buffer));
 			xPic[coordinatenr] = atof(buffer);
-			if(!yPic[coordinatenr] == NULL) coordinatenr++;			
+			uart_puts("\n\r x ");
+			uart_puts(buffer);
+			if(!(yPic[coordinatenr] == 0)) coordinatenr++;			
 		} else if (buffer[0] == 'y') {
-			memmove(buffer, buffer+1, strlen(buffer))
+			memmove(buffer, buffer+1, strlen(buffer));
 			yPic[coordinatenr] = atof(buffer);
-			if(!xPic[coordinatenr] == NULL) coordinatenr++;			
+			uart_puts("\n\r y ");
+			uart_puts(buffer);
+			if(!(xPic[coordinatenr] == 0)) coordinatenr++;			
 		} 
 		bint = 0;
 	} else {
@@ -183,16 +187,46 @@ int main(void) {
 	//gotoRadial(90,20);
 
 	//drawCircle(0,17, 4);
+	uint16_t currentstep = 0;
+	uint32_t start = getMsTimer();
    	while(1) {
 		
-		uart_puts("\n\r Increments: ");
-		uart_puti(counter1);
-		uart_puts(" ");
-		uart_puti(counter2);
-		uart_puts(" Targets: ");
-		uart_puti(target1);
-		uart_puts(" ");
-		uart_puti(target2);	
+		
+		/*if(getMsTimer() > start+10000 && !(xPic[currentstep] == 0) && !(yPic[currentstep] == 0)) {
+			uart_puts("\r\n coords: " );
+			uart_puti(round(xPic[currentstep]));
+			uart_puts(" ");
+			uart_puti(round(yPic[currentstep]));
+			uart_puts(" ");
+			uart_puti(currentstep);
+			uart_puts("\n\r Increments: ");
+			uart_puti(counter1);
+			uart_puts(" ");
+			uart_puti(counter2);
+			uart_puts(" Targets: ");
+			uart_puti(target1);
+			uart_puts(" ");
+			uart_puti(target2);
+		
+
+		}
+		*/
+
+		if(getMsTimer() >= start+10000) {
+			int i;
+			
+			for(i=0; i < coordinatenr; i++) {
+				uart_puts("\n\r Coordinaten: ");
+				uart_puti(coordinatenr);
+				uart_puts(" x ");
+				uart_puti(round(xPic[i]));
+				uart_puts(" y ");
+				uart_puti(round(yPic[i]));
+			}
+		}
+
+
+		
 		if (counter1 != target1) {
 			OCR1A = counter1;
 		}
@@ -225,8 +259,10 @@ int main(void) {
 			}*/
 
 			if(!lock){
-				gotoXY(xPic[currentstep], yPic[currentstep];)
+				if(!(xPic[currentstep] == 0 && yPic[currentstep] == 0)) gotoXY(xPic[currentstep], yPic[currentstep]);
 				lock = 1;
+				_delay_ms(10);
+				currentstep++;
 			}
 		}
 		
