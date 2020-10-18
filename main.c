@@ -30,9 +30,17 @@ void init();
 
 volatile float mod = 1;
 
+volatile int coordinatenrx = 0;
+volatile int coordinatenry = 0;
+
+volatile float* xPic;
+volatile float* yPic;
+
+volatile int bint=0;
+volatile char buffer[100];
+
 volatile uint16_t target1 = (SERVO_MIN + SERVO_MAX)/2;
 volatile uint16_t target2 = (SERVO_MIN + SERVO_MAX)/2;
-
 
 volatile uint16_t counter1 = (SERVO_MIN + SERVO_MAX)/2; // Großer Arm
 volatile uint16_t counter2 = (SERVO_MIN + SERVO_MAX)/2; // kleiner Arm
@@ -67,30 +75,22 @@ ISR(TIMER1_OVF_vect) {
 }
 
 
-volatile int16_t coordinatenr = 0;
-volatile float* xPic = { 0 };
-volatile float* yPic = { 0 };
-
-volatile int bint=0;
-volatile char buffer[100];
-volatile char cordbuffer[100];
-
 ISR(USART_RX_vect) {
 	buffer[bint] = UDR0;
 	if(buffer[bint] == '\r') {
 		buffer[bint] = '\0';
 		if(buffer[0] == 'x') {
 			memmove(buffer, buffer+1, strlen(buffer));
-			xPic[coordinatenr] = atof(buffer);
+			xPic[coordinatenrx] = atof(buffer);
+			coordinatenrx += 1;
 			uart_puts("\n\r x ");
-			uart_puts(buffer);
-			if(!(yPic[coordinatenr] == 0)) coordinatenr++;			
+			uart_puti(atoi(buffer));
 		} else if (buffer[0] == 'y') {
 			memmove(buffer, buffer+1, strlen(buffer));
-			yPic[coordinatenr] = atof(buffer);
+			yPic[coordinatenry] = atof(buffer);
+			coordinatenry += 1;
 			uart_puts("\n\r y ");
-			uart_puts(buffer);
-			if(!(xPic[coordinatenr] == 0)) coordinatenr++;			
+			uart_puti(atoi(buffer));
 		} 
 		bint = 0;
 	} else {
@@ -177,8 +177,8 @@ int main(void) {
 	setBit(TIMSK1, TOIE1);
 
 	setBit(UCSR0B, RXCIE0);
-    setBit(UCSR0B, RXC0);
-    setBit(UCSR0B, TXC0);
+	setBit(UCSR0B, RXC0);
+    	setBit(UCSR0B, TXC0);
 
 	uint16_t arrived = 0;
 	uint8_t lock =0;
@@ -188,9 +188,8 @@ int main(void) {
 
 	//drawCircle(0,17, 4);
 	uint16_t currentstep = 0;
-	uint32_t start = getMsTimer();
-   	while(1) {
-		
+
+   	while(0) {
 		
 		/*if(getMsTimer() > start+10000 && !(xPic[currentstep] == 0) && !(yPic[currentstep] == 0)) {
 			uart_puts("\r\n coords: " );
@@ -211,61 +210,59 @@ int main(void) {
 
 		}
 		*/
-
-		if(getMsTimer() >= start+10000) {
-			int i;
+		if(1) {
+			uint32_t i;
+			uart_puts("\n\r Coordinaten: ");
+			uart_puti(coordinatenrx);
 			
-			for(i=0; i < coordinatenr; i++) {
-				uart_puts("\n\r Coordinaten: ");
-				uart_puti(coordinatenr);
+			for(i=0; i < coordinatenrx; i++) {
 				uart_puts(" x ");
 				uart_puti(round(xPic[i]));
 				uart_puts(" y ");
 				uart_puti(round(yPic[i]));
-			}
-		}
+			}		
 
 
 		
-		if (counter1 != target1) {
-			OCR1A = counter1;
-		}
-		
-		if (counter2 != target2) {
-			OCR1B = counter2;
-		}				
-		
-		if (counter1 == target1 && counter2 == target2 && lock) {
-			arrived +=1;
-			lock = 0;
-		} else {
-			/*
-			if (arrived % 4 == 0) {
-				gotoXY(-2,19);
-			} else if (arrived % 4 == 1) {
-				gotoXY(-2,15);
-			} else if (arrived % 4 == 2) {
-				gotoXY(2,15);
-			} else if (arrived % 4 == 3) {
-				gotoXY(2,19);
+			if (counter1 != target1) {
+				OCR1A = counter1;
 			}
-			*/
-			/*if(!lock){
-				uint16_t currentstep = arrived % steps;
-				uart_puts("\n\r currentstep: ");
-				uart_puti(currentstep);	
-				gotoXY(circlex[currentstep], circley[currentstep]);
-				lock = 1;
-			}*/
+			
+			if (counter2 != target2) {
+				OCR1B = counter2;
+			}				
+			
+			if (counter1 == target1 && counter2 == target2 && lock) {
+				arrived +=1;
+				lock = 0;
+			} else {
+				/*
+				if (arrived % 4 == 0) {
+					gotoXY(-2,19);
+				} else if (arrived % 4 == 1) {
+					gotoXY(-2,15);
+				} else if (arrived % 4 == 2) {
+					gotoXY(2,15);
+				} else if (arrived % 4 == 3) {
+					gotoXY(2,19);
+				}
+				*/
+				/*if(!lock){
+					uint16_t currentstep = arrived % steps;
+					uart_puts("\n\r currentstep: ");
+					uart_puti(currentstep);	
+					gotoXY(circlex[currentstep], circley[currentstep]);
+					lock = 1;
+				}*/
 
-			if(!lock){
-				if(!(xPic[currentstep] == 0 && yPic[currentstep] == 0)) gotoXY(xPic[currentstep], yPic[currentstep]);
-				lock = 1;
-				_delay_ms(10);
-				currentstep++;
+				if(!lock){
+					gotoXY(xPic[currentstep], yPic[currentstep]);
+					lock = 1;
+					_delay_ms(10);
+					currentstep++;
+				}
 			}
-		}
-		
+		}	
 	}
 }
 
@@ -273,8 +270,8 @@ int main(void) {
 //INIT
 void init() {
 	uartInit();		// serielle Ausgabe an PC
-	ADCInit(0);		// Analoge Werte einlesen
-	PWMInit();		// Pulsweite auf D6 ausgeben 
+	//ADCInit(0);		// Analoge Werte einlesen
+	//PWMInit();		// Pulsweite auf D6 ausgeben 
 	timerInit();		// "Systemzeit" initialisieren
 	servoInit(); 		// Servoansteuerung initialisieren
 }
