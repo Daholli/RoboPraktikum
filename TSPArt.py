@@ -6,7 +6,7 @@ import random
 import sys
 import itertools
 import VoronoiDiagram
-from CleanUp import correct
+#from CleanUp import correct
 import NN
 from Seg import Seg
 
@@ -121,13 +121,13 @@ if __name__ == '__main__':
   with open("datapoints.txt", 'w') as f:
     f.write(str(lst))
 
-  print('Now converting to list of segments...')
-  segSet = createSegSet(lst)
+ # print('Now converting to list of segments...')
+ # segSet = createSegSet(lst)
 
   ## Let's make sure all of our segments share a point...
-  print('Correcting any overlaps...')
-  drawSegSet(segSet, im.size, 'start.jpg')
-  segSet = correct(segSet, im)
+ # print('Correcting any overlaps...')
+ # drawSegSet(segSet, im.size, 'start.jpg')
+ # segSet = correct(segSet, im)
 
-  drawSegSet(segSet, im.size, 'end.jpg')
+ # drawSegSet(segSet, im.size, 'end.jpg')
   print('Done.')

@@ -30,8 +30,8 @@ void init();
 
 volatile float mod = 1;
 
-volatile int coordinatenrx = 0;
-volatile int coordinatenry = 0;
+volatile uint32_t coordinatenrx = 0;
+volatile uint32_t coordinatenry = 0;
 
 volatile float* xPic;
 volatile float* yPic;
