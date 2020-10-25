@@ -26,7 +26,6 @@ void init();
 
 #define L1 12
 #define L2 10
-#define steps 16
 
 volatile float mod = 1;
 
@@ -74,6 +73,21 @@ ISR(TIMER1_OVF_vect) {
 	}
 }
 
+volatile int iterx = 0;
+volatile int itery = 0;
+
+
+void addtoarray(char id, float coord) {
+	if(id == 'x') {
+		xPic[iterx] = coord;
+		iterx++;
+	} else if (id == 'y') {
+		yPic[itery] = coord;
+		itery++;
+	}
+}
+
+volatile uint16_t arraysize;
 
 ISR(USART_RX_vect) {
 	buffer[bint] = UDR0;
@@ -81,17 +95,14 @@ ISR(USART_RX_vect) {
 		buffer[bint] = '\0';
 		if(buffer[0] == 'x') {
 			memmove(buffer, buffer+1, strlen(buffer));
-			xPic[coordinatenrx] = atof(buffer);
-			coordinatenrx += 1;
-			uart_puts("\n\r x ");
-			uart_puti(atoi(buffer));
+			addtoarray('x' , atof(buffer));
 		} else if (buffer[0] == 'y') {
 			memmove(buffer, buffer+1, strlen(buffer));
-			yPic[coordinatenry] = atof(buffer);
-			coordinatenry += 1;
-			uart_puts("\n\r y ");
-			uart_puti(atoi(buffer));
-		} 
+			addtoarray('y', atof(buffer));
+		} else if (buffer[0] == 's') {
+			memmove(buffer, buffer+1, strlen(buffer));
+			arraysize = atoi(buffer);
+		}
 		bint = 0;
 	} else {
 		bint++;
@@ -152,20 +163,6 @@ void scale() {
 			
 }
 
-
-
-volatile float circlex[steps];
-volatile float circley[steps];
-void drawCircle(float x, float y, float r) {
-	int i;
-	if(steps == 0) return;
-	float stepsize = 360/steps;
-	for(i = 0; i < steps; i++){
-		circlex[i] = x + r * cos(stepsize*i*M_PI/180);
-		circley[i] = y + r * sin(stepsize*i*M_PI/180);
-	}
-}
-
 int main(void) {
 	// Initialisierung ausfuehren
 
@@ -177,36 +174,12 @@ int main(void) {
 	setBit(UCSR0B, RXC0);
     setBit(UCSR0B, TXC0);
 
-	uint16_t arrived = 0;
 	uint8_t lock =0;
-	//gotoXY(-5, 15);
 	
-	//gotoRadial(90,20);
-
-	//drawCircle(0,17, 4);
 	uint16_t currentstep = 0;
 
    	while(0) {
-		
-		/*if(getMsTimer() > start+10000 && !(xPic[currentstep] == 0) && !(yPic[currentstep] == 0)) {
-			uart_puts("\r\n coords: " );
-			uart_puti(round(xPic[currentstep]));
-			uart_puts(" ");
-			uart_puti(round(yPic[currentstep]));
-			uart_puts(" ");
-			uart_puti(currentstep);
-			uart_puts("\n\r Increments: ");
-			uart_puti(counter1);
-			uart_puts(" ");
-			uart_puti(counter2);
-			uart_puts(" Targets: ");
-			uart_puti(target1);
-			uart_puts(" ");
-			uart_puti(target2);
-		
-
-		}
-		*/
+				
 		if(1) {
 			// Let the servo draw slowly
 			if (counter1 != target1) {
@@ -219,7 +192,6 @@ int main(void) {
 			
 			// determine if it arrived
 			if (counter1 == target1 && counter2 == target2 && lock) {
-				arrived +=1;
 				lock = 0;
 			} else {
 				if(!lock){

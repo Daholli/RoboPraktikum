@@ -40,6 +40,10 @@ class ScaraRobo():
             exit()
         self.ser.write(chr(255).encode())
 
+    def datapoints(self):
+        msg = "s" +str(data.shape[0])
+        self.ser.write(msg.encode())
+
     def setX(self, line):
         self.ser.write(data[line][0].encode())
 
@@ -48,6 +52,9 @@ class ScaraRobo():
 
 
     def draw(self, data):
+        sleep(0.5)
+        self.datapoints()
+        sleep(0.5)
         for i in range(data.shape[0]):
             sleep(0.01)
             self.setX(i)

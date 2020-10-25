@@ -8,6 +8,8 @@ import itertools
 import VoronoiDiagram
 import NN
 
+from Seg import Seg
+
 ##
 #   readImage(filename) retrieves the specified image and returns
 # a black-and-white version of that image.
@@ -59,6 +61,25 @@ def drawCirc(draw, pt, r, color):
   pt1 = (pt[0]+r, pt[1]+r)
   draw.ellipse([pt0, pt1], fill=color)
 
+def createSegSet(lst):
+  segList = [Seg(lst[i], lst[i+1]) for i in range(len(lst)-1)] + [Seg(lst[0], lst[len(lst)-1])]
+  for i in range(len(segList)):
+    segList[i].prevSeg = segList[i-1]
+    segList[i].nextSeg = segList[(i+1)%len(segList)]
+
+  return set(segList)
+
+def drawSegSet(segSet, sz, fname):
+  im = Image.new('RGB', sz, (255, 255, 255))
+  draw = ImageDraw.Draw(im)
+  
+  for seg in segSet:
+    draw.line(seg.toList(), fill=(127, 127, 127), width=1)
+
+  del draw
+
+  im.save(fname)
+
 if __name__ == '__main__':
   sys.setrecursionlimit(6000)
   # bounds check
@@ -89,4 +110,7 @@ if __name__ == '__main__':
   with open("datapoints.txt", 'w') as f:
     f.write(str(lst))
 
+  # this is just for drawing the picture
+  segSet = createSegSet(lst)
+  drawSegSet(segSet, im.size, 'tsp.jpg')
   print('Done.')
