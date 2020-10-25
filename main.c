@@ -152,10 +152,7 @@ void scale() {
 			
 }
 
-void resetServo() {
-	target1 = (SERVO_MIN+SERVO_MAX)/2; 
-	target2 = (SERVO_MIN+SERVO_MAX)/2; 
-}
+
 
 volatile float circlex[steps];
 volatile float circley[steps];
@@ -178,7 +175,7 @@ int main(void) {
 
 	setBit(UCSR0B, RXCIE0);
 	setBit(UCSR0B, RXC0);
-    	setBit(UCSR0B, TXC0);
+    setBit(UCSR0B, TXC0);
 
 	uint16_t arrived = 0;
 	uint8_t lock =0;
@@ -211,19 +208,7 @@ int main(void) {
 		}
 		*/
 		if(1) {
-			uint32_t i;
-			uart_puts("\n\r Coordinaten: ");
-			uart_puti(coordinatenrx);
-			
-			for(i=0; i < coordinatenrx; i++) {
-				uart_puts(" x ");
-				uart_puti(round(xPic[i]));
-				uart_puts(" y ");
-				uart_puti(round(yPic[i]));
-			}		
-
-
-		
+			// Let the servo draw slowly
 			if (counter1 != target1) {
 				OCR1A = counter1;
 			}
@@ -232,29 +217,11 @@ int main(void) {
 				OCR1B = counter2;
 			}				
 			
+			// determine if it arrived
 			if (counter1 == target1 && counter2 == target2 && lock) {
 				arrived +=1;
 				lock = 0;
 			} else {
-				/*
-				if (arrived % 4 == 0) {
-					gotoXY(-2,19);
-				} else if (arrived % 4 == 1) {
-					gotoXY(-2,15);
-				} else if (arrived % 4 == 2) {
-					gotoXY(2,15);
-				} else if (arrived % 4 == 3) {
-					gotoXY(2,19);
-				}
-				*/
-				/*if(!lock){
-					uint16_t currentstep = arrived % steps;
-					uart_puts("\n\r currentstep: ");
-					uart_puti(currentstep);	
-					gotoXY(circlex[currentstep], circley[currentstep]);
-					lock = 1;
-				}*/
-
 				if(!lock){
 					gotoXY(xPic[currentstep], yPic[currentstep]);
 					lock = 1;
