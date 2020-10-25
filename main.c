@@ -29,14 +29,6 @@ void init();
 
 volatile float mod = 1;
 
-volatile int coordinatenrx = 0;
-volatile int coordinatenry = 0;
-
-volatile float* xPic;
-volatile float* yPic;
-
-volatile int bint=0;
-volatile char buffer[100];
 
 volatile uint16_t target1 = (SERVO_MIN + SERVO_MAX)/2;
 volatile uint16_t target2 = (SERVO_MIN + SERVO_MAX)/2;
@@ -72,10 +64,13 @@ ISR(TIMER1_OVF_vect) {
 		}
 	}
 }
+// init array for the picture
 
-volatile int iterx = 0;
-volatile int itery = 0;
+volatile float* xPic;
+volatile float* yPic;
 
+volatile uint16_t iterx = 0;
+volatile uint16_t itery = 0;
 
 void addtoarray(char id, float coord) {
 	if(id == 'x') {
@@ -88,6 +83,9 @@ void addtoarray(char id, float coord) {
 }
 
 volatile uint16_t arraysize;
+
+volatile int bint=0;
+volatile char buffer[100];
 
 ISR(USART_RX_vect) {
 	buffer[bint] = UDR0;
@@ -194,7 +192,7 @@ int main(void) {
 			if (counter1 == target1 && counter2 == target2 && lock) {
 				lock = 0;
 			} else {
-				if(!lock){
+				if(!lock && currentstep < arraysize){
 					gotoXY(xPic[currentstep], yPic[currentstep]);
 					lock = 1;
 					_delay_ms(10);
