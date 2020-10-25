@@ -66,8 +66,8 @@ ISR(TIMER1_OVF_vect) {
 }
 // init array for the picture
 
-volatile float* xPic;
-volatile float* yPic;
+volatile float xPic[];
+volatile float yPic[];
 
 volatile uint16_t iterx = 0;
 volatile uint16_t itery = 0;
@@ -159,6 +159,42 @@ void scale() {
 		mod = 5;
 	}
 			
+}
+
+float min;
+float max;
+
+int find_minimum(float a[]) {
+  int c, index = 0;
+ 
+  for (c = 1; c < arraysize; c++)
+    if (a[c] < min)
+      index = c;
+
+  return index;
+}
+
+int find_maximum(float a[]) {
+  int c, index = 0;
+ 
+  for (c = 1; c < arraysize; c++)
+    if (a[c] > max)
+      index = c;
+
+  return index;
+}
+
+void scaleImage() {
+	float minx, miny, maxx, maxy;
+	
+	minx = xPic[find_minimum(xPic)];
+	miny = yPic[find_minimum(yPic)];
+
+	maxx = xPic[find_maximum(xPic)];
+	maxy = yPic[find_maximum(yPic)];
+
+	float lenghtx = maxx - minx;
+	float lengthy = maxy - miny; 
 }
 
 int main(void) {
