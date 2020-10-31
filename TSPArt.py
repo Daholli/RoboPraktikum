@@ -6,8 +6,8 @@ import random
 import sys
 import itertools
 import VoronoiDiagram
-#from CleanUp import correct
 import NN
+
 from Seg import Seg
 
 ##
@@ -28,8 +28,6 @@ def readImage(filename):
 def stipple(im, bxSz, itr):
   xSz = im.size[0]
   ySz = im.size[1]
-
-  cutoff = ImageStat.Stat(im).mean[0]
 
   # Create initial, evenly distributed VD
   genPts = []
@@ -71,21 +69,12 @@ def createSegSet(lst):
 
   return set(segList)
 
-def drawSegSet(segSet, sz, fname, red=set(), green=set(), blue=set()):
+def drawSegSet(segSet, sz, fname):
   im = Image.new('RGB', sz, (255, 255, 255))
   draw = ImageDraw.Draw(im)
-
+  
   for seg in segSet:
     draw.line(seg.toList(), fill=(127, 127, 127), width=1)
-
-  for seg in red:
-    draw.line(seg.toList(), fill=(255, 0, 0), width=2)
-
-  for seg in green:
-    draw.line(seg.toList(), fill=(0, 255, 0), width=2)
-
-  for seg in blue:
-    draw.line(seg.toList(), fill=(0, 0, 255), width=2)
 
   del draw
 
@@ -121,13 +110,7 @@ if __name__ == '__main__':
   with open("datapoints.txt", 'w') as f:
     f.write(str(lst))
 
- # print('Now converting to list of segments...')
- # segSet = createSegSet(lst)
-
-  ## Let's make sure all of our segments share a point...
- # print('Correcting any overlaps...')
- # drawSegSet(segSet, im.size, 'start.jpg')
- # segSet = correct(segSet, im)
-
- # drawSegSet(segSet, im.size, 'end.jpg')
+  # this is just for drawing the picture
+  segSet = createSegSet(lst)
+  drawSegSet(segSet, im.size, 'tsp.jpg')
   print('Done.')

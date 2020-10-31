@@ -26,18 +26,9 @@ void init();
 
 #define L1 12
 #define L2 10
-#define steps 16
 
 volatile float mod = 1;
 
-volatile uint32_t coordinatenrx = 0;
-volatile uint32_t coordinatenry = 0;
-
-volatile float* xPic;
-volatile float* yPic;
-
-volatile int bint=0;
-volatile char buffer[100];
 
 volatile uint16_t target1 = (SERVO_MIN + SERVO_MAX)/2;
 volatile uint16_t target2 = (SERVO_MIN + SERVO_MAX)/2;
@@ -73,7 +64,28 @@ ISR(TIMER1_OVF_vect) {
 		}
 	}
 }
+// init array for the picture
 
+volatile float xPic[];
+volatile float yPic[];
+
+volatile uint16_t iterx = 0;
+volatile uint16_t itery = 0;
+
+void addtoarray(char id, float coord) {
+	if(id == 'x') {
+		xPic[iterx] = coord;
+		iterx++;
+	} else if (id == 'y') {
+		yPic[itery] = coord;
+		itery++;
+	}
+}
+
+volatile uint16_t arraysize;
+
+volatile int bint=0;
+volatile char buffer[100];
 
 ISR(USART_RX_vect) {
 	buffer[bint] = UDR0;
@@ -83,18 +95,14 @@ ISR(USART_RX_vect) {
 		if(buffer[0] == 'x') {
 			temp = coordinatenrx;
 			memmove(buffer, buffer+1, strlen(buffer));
-			xPic[coordinatenrx] = atof(buffer);
-			coordinatenrx += 1;
-			uart_puts("\n\r x ");
-			uart_puti(atoi(buffer));
-			coordinatenrx = temp;
+			addtoarray('x' , atof(buffer));
 		} else if (buffer[0] == 'y') {
 			memmove(buffer, buffer+1, strlen(buffer));
-			yPic[coordinatenry] = atof(buffer);
-			coordinatenry += 1;
-			uart_puts("\n\r y ");
-			uart_puti(atoi(buffer));
-		} 
+			addtoarray('y', atof(buffer));
+		} else if (buffer[0] == 's') {
+			memmove(buffer, buffer+1, strlen(buffer));
+			arraysize = atoi(buffer);
+		}
 		bint = 0;
 	} else {
 		bint++;
@@ -155,21 +163,40 @@ void scale() {
 			
 }
 
-void resetServo() {
-	target1 = (SERVO_MIN+SERVO_MAX)/2; 
-	target2 = (SERVO_MIN+SERVO_MAX)/2; 
+float min;
+float max;
+
+int find_minimum(float a[]) {
+  int c, index = 0;
+ 
+  for (c = 1; c < arraysize; c++)
+    if (a[c] < min)
+      index = c;
+
+  return index;
 }
 
-volatile float circlex[steps];
-volatile float circley[steps];
-void drawCircle(float x, float y, float r) {
-	int i;
-	if(steps == 0) return;
-	float stepsize = 360/steps;
-	for(i = 0; i < steps; i++){
-		circlex[i] = x + r * cos(stepsize*i*M_PI/180);
-		circley[i] = y + r * sin(stepsize*i*M_PI/180);
-	}
+int find_maximum(float a[]) {
+  int c, index = 0;
+ 
+  for (c = 1; c < arraysize; c++)
+    if (a[c] > max)
+      index = c;
+
+  return index;
+}
+
+void scaleImage() {
+	float minx, miny, maxx, maxy;
+	
+	minx = xPic[find_minimum(xPic)];
+	miny = yPic[find_minimum(yPic)];
+
+	maxx = xPic[find_maximum(xPic)];
+	maxy = yPic[find_maximum(yPic)];
+
+	float lenghtx = maxx - minx;
+	float lengthy = maxy - miny; 
 }
 
 int main(void) {
@@ -181,52 +208,16 @@ int main(void) {
 
 	setBit(UCSR0B, RXCIE0);
 	setBit(UCSR0B, RXC0);
-    	setBit(UCSR0B, TXC0);
+    setBit(UCSR0B, TXC0);
 
-	uint16_t arrived = 0;
 	uint8_t lock =0;
-	//gotoXY(-5, 15);
 	
-	//gotoRadial(90,20);
-
-	//drawCircle(0,17, 4);
 	uint16_t currentstep = 0;
 
    	while(0) {
-		
-		/*if(getMsTimer() > start+10000 && !(xPic[currentstep] == 0) && !(yPic[currentstep] == 0)) {
-			uart_puts("\r\n coords: " );
-			uart_puti(round(xPic[currentstep]));
-			uart_puts(" ");
-			uart_puti(round(yPic[currentstep]));
-			uart_puts(" ");
-			uart_puti(currentstep);
-			uart_puts("\n\r Increments: ");
-			uart_puti(counter1);
-			uart_puts(" ");
-			uart_puti(counter2);
-			uart_puts(" Targets: ");
-			uart_puti(target1);
-			uart_puts(" ");
-			uart_puti(target2);
-		
-
-		}
-		*/
+				
 		if(1) {
-			uint32_t i;
-			uart_puts("\n\r Coordinaten: ");
-			uart_puti(coordinatenrx);
-			
-			for(i=0; i < coordinatenrx; i++) {
-				uart_puts(" x ");
-				uart_puti(round(xPic[i]));
-				uart_puts(" y ");
-				uart_puti(round(yPic[i]));
-			}		
-
-
-		
+			// Let the servo draw slowly
 			if (counter1 != target1) {
 				OCR1A = counter1;
 			}
@@ -235,30 +226,11 @@ int main(void) {
 				OCR1B = counter2;
 			}				
 			
+			// determine if it arrived
 			if (counter1 == target1 && counter2 == target2 && lock) {
-				arrived +=1;
 				lock = 0;
 			} else {
-				/*
-				if (arrived % 4 == 0) {
-					gotoXY(-2,19);
-				} else if (arrived % 4 == 1) {
-					gotoXY(-2,15);
-				} else if (arrived % 4 == 2) {
-					gotoXY(2,15);
-				} else if (arrived % 4 == 3) {
-					gotoXY(2,19);
-				}
-				*/
-				/*if(!lock){
-					uint16_t currentstep = arrived % steps;
-					uart_puts("\n\r currentstep: ");
-					uart_puti(currentstep);	
-					gotoXY(circlex[currentstep], circley[currentstep]);
-					lock = 1;
-				}*/
-
-				if(!lock){
+				if(!lock && currentstep < arraysize){
 					gotoXY(xPic[currentstep], yPic[currentstep]);
 					lock = 1;
 					_delay_ms(10);
