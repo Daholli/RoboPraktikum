@@ -77,14 +77,17 @@ ISR(TIMER1_OVF_vect) {
 
 ISR(USART_RX_vect) {
 	buffer[bint] = UDR0;
+	uint16_t temp;
 	if(buffer[bint] == '\r') {
 		buffer[bint] = '\0';
 		if(buffer[0] == 'x') {
+			temp = coordinatenrx;
 			memmove(buffer, buffer+1, strlen(buffer));
 			xPic[coordinatenrx] = atof(buffer);
 			coordinatenrx += 1;
 			uart_puts("\n\r x ");
 			uart_puti(atoi(buffer));
+			coordinatenrx = temp;
 		} else if (buffer[0] == 'y') {
 			memmove(buffer, buffer+1, strlen(buffer));
 			yPic[coordinatenry] = atof(buffer);
