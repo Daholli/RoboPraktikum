@@ -178,7 +178,7 @@ int main(void) {
 
 	setBit(UCSR0B, RXCIE0);
 	setBit(UCSR0B, RXC0);
-    	setBit(UCSR0B, TXC0);
+    setBit(UCSR0B, TXC0);
 
 	uint16_t arrived = 0;
 	uint8_t lock =0;
